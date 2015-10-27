@@ -2,48 +2,19 @@
    these badges work. The necessary Travis and Coverage config files have been
    generated for you.
 
-.. image:: https://travis-ci.org/eawag-rdm/ckanext-eaw_vocabularies.svg?branch=master
-    :target: https://travis-ci.org/eawag-rdm/ckanext-eaw_vocabularies
-
-.. image:: https://coveralls.io/repos/eawag-rdm/ckanext-eaw_vocabularies/badge.png?branch=master
-  :target: https://coveralls.io/r/eawag-rdm/ckanext-eaw_vocabularies?branch=master
-
-.. image:: https://pypip.in/download/ckanext-eaw_vocabularies/badge.svg
-    :target: https://pypi.python.org/pypi//ckanext-eaw_vocabularies/
-    :alt: Downloads
-
-.. image:: https://pypip.in/version/ckanext-eaw_vocabularies/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-eaw_vocabularies/
-    :alt: Latest Version
-
-.. image:: https://pypip.in/py_versions/ckanext-eaw_vocabularies/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-eaw_vocabularies/
-    :alt: Supported Python versions
-
-.. image:: https://pypip.in/status/ckanext-eaw_vocabularies/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-eaw_vocabularies/
-    :alt: Development Status
-
-.. image:: https://pypip.in/license/ckanext-eaw_vocabularies/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-eaw_vocabularies/
-    :alt: License
+.. Badges removed
 
 =============
 ckanext-eaw_vocabularies
 =============
 
-.. Put a description of your extension here:
-   What does it do? What features does it have?
-   Consider including some screenshots or embedding a video!
-
+Handles controlled vocabulary fields for Eawag RDP, e.g., for "System" and "Variables".
 
 ------------
 Requirements
 ------------
 
-For example, you might want to mention here which versions of CKAN this
-extension works with.
-
+Tested with CKAN v2.4.1
 
 ------------
 Installation
