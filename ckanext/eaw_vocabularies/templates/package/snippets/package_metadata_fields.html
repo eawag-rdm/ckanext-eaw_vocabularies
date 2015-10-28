@@ -1,23 +1,4 @@
 {% ckan_extends %}
 
-{# {% block package_basic_fields_custom %} #}
-
-{% block package_metadata_fields %}
-
-  <div class="control-group">
-    <label class="control-label" for="field-system">{{ _("System") }}</label>
-    <div class="controls">
-      <select id="field-system" name="system" data-module="autocomplete">
-        {% for system in h.systems()  %}
-	<option value="{{ system }}" {% if system in data.get('system', []) %}"selected"{% endif %}>{{ system }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-
-  {{ super() }}
+{% block custom_fields %}
 {% endblock %}
-  
-{# {% block custom_fields %}
-{% endblock %} #}
-

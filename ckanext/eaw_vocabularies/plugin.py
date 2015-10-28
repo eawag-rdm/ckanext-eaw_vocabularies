@@ -1,9 +1,9 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 
-def eaw_vocabularies_systems():
+def eaw_taglist(vocab_name):
     tag_list = tk.get_action('tag_list')
-    return(tag_list(data_dict={'vocabulary_id': 'system'}))
+    return(tag_list(data_dict={'vocabulary_id': vocab_name}))
 
 
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
@@ -21,7 +21,9 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def _modify_package_schema(self, schema):
         schema.update({
             'system': [tk.get_validator('ignore_missing'),
-                       tk.get_converter('convert_to_tags')('system')]})
+                       tk.get_converter('convert_to_tags')('system')],
+            'variables': [tk.get_converter('convert_to_tags')('variables')]
+        })
         return(schema)
         
     def create_package_schema(self):
@@ -39,7 +41,9 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
         schema['tags']['__extras'].append(tk.get_converter('free_tags_only'))
         schema.update({
             'system': [tk.get_converter('convert_from_tags')('system'),
-                       tk.get_validator('ignore_missing')]})
+                       tk.get_validator('ignore_missing')],
+            'variables': [tk.get_converter('convert_from_tags')('variables')]
+        })
         return(schema)
     
     def is_fallback(self):
@@ -54,4 +58,4 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     
     # ITemplateHelpers
     def get_helpers(self):
-        return({'systems': eaw_vocabularies_systems})
+        return({'eaw_taglist': eaw_taglist})
