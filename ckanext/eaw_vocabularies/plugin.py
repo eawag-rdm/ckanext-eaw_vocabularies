@@ -20,9 +20,10 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     # IDatasetform
     def _modify_package_schema(self, schema):
         schema.update({
-            'system': [tk.get_validator('ignore_missing'),
+            'system': [tk.get_validator('not_missing'),
                        tk.get_converter('convert_to_tags')('system')],
-            'variables': [tk.get_converter('convert_to_tags')('variables')]
+            'variables': [tk.get_validator('not_missing'),
+                          tk.get_converter('convert_to_tags')('variables')]
         })
         return(schema)
         
