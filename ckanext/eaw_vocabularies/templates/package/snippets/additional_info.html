@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block extras %}
+{% if pkg_dict.system %}
+<tr>
+  <th scope="row" class="dataset-label">{{ _("System" ) }}</th>
+  <td class="dataset-details">{{ pkg_dict.system }}</td>
+</tr>
+{% endif %}
+{% endblock %}
