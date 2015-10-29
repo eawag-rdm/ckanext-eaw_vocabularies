@@ -2,32 +2,23 @@
 
 {% block package_basic_fields_custom %}
 
-<div class="control-group">
-  <label class="control-label" for="field-system">{{ _("System") }}</label>
-  <div class="controls">
-    <select id="field-system" name="system" data-module="autocomplete">
-      {% for system in h.eaw_taglist("system")  %}
-      <option value="{{ system }}" {% if system in data.get('system', []) %}selected="selected"{% endif %}>{{ system }}</option>
-      {% endfor %}
-    </select>
-  </div>
-</div>
+{% set taglist=h.eaw_taglist("system") %}
+{% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
+{% set select = data.get('system', []) %}
+{{ form.select('system', id='field-system',
+attrs={"data-module": "autocomplete", "placeholder": placeholder},
+label=_('System'), options=h.eaw_taglist("system"),is_required=true, selected=select) }}
 
-<div class="control-group">
-  <label class="control-label" for="field-variables">{{ _("Variables") }}</label>
-  <div class="controls">
-    <select id="field-variables" name="variables" multiple="multiple"
-	    placeholder="eg. {% for v in h.eaw_taglist('variables')[0:2] %}{{ v }}, {% endfor %}{{ h.eaw_taglist('variables')[3] }}..." data-module="autocomplete">
-      {% for variable in h.eaw_taglist("variables") %}
-        <option value="{{ variable }}">{{ variable }}</option>
-      {% endfor %}
-    </select>
-  </div>
-</div>
+{% set taglist=h.eaw_taglist("variables") %}
+{% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
+{% set select = data.get('variables', []) %}
+{{ form.select('variables', id='field-variables',
+attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
+label=_('Variables'), options=h.eaw_taglist("variables"),is_required=true, selected=select) }}
 
 {{ super() }}
 {% endblock %}
-  
+
+
 {% block custom_fields %}
 {% endblock %}
-

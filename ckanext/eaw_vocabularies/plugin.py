@@ -3,8 +3,9 @@ import ckan.plugins.toolkit as tk
 
 def eaw_taglist(vocab_name):
     tag_list = tk.get_action('tag_list')
-    return(tag_list(data_dict={'vocabulary_id': vocab_name}))
-
+    tags = tag_list(data_dict={'vocabulary_id': vocab_name})
+    tags = [{'value': tag} for tag in tags]
+    return(tags)
 
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
