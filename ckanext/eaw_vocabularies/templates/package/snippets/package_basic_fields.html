@@ -4,7 +4,7 @@
 
 {% set taglist=h.eaw_taglist("system") %}
 {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
-{% set select = data.get('system', []) %}
+{% set select = data.get('system', []) | first %}
 {{ form.select('system', id='field-system',
 attrs={"data-module": "autocomplete", "placeholder": placeholder},
 label=_('System'), options=h.eaw_taglist("system"),is_required=true, selected=select) }}

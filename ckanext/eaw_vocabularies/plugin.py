@@ -24,7 +24,9 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
             'system': [tk.get_validator('not_missing'),
                        tk.get_converter('convert_to_tags')('system')],
             'variables': [tk.get_validator('not_missing'),
-                          tk.get_converter('convert_to_tags')('variables')]
+                          tk.get_converter('convert_to_tags')('variables')],
+            'timerange': [tk.get_validator('not_missing'),
+                          tk.get_converter('convert_to_extras')]
         })
         return(schema)
         
@@ -44,7 +46,10 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
         schema.update({
             'system': [tk.get_converter('convert_from_tags')('system'),
                        tk.get_validator('ignore_missing')],
-            'variables': [tk.get_converter('convert_from_tags')('variables')]
+            'variables': [tk.get_converter('convert_from_tags')('variables'),
+                          tk.get_validator('ignore_missing')],
+            'timerange': [tk.get_converter('convert_from_extras'),
+                          tk.get_validator('ignore_missing')]
         })
         return(schema)
     
