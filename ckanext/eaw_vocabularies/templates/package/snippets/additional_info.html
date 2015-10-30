@@ -1,16 +1,23 @@
 {% ckan_extends %}
 
 {% block extras %}
+
+{% if pkg_dict.variables %}
+<tr>
+  <th scope="row" class="dataset-label">{{ _("Variables" ) }}</th>
+  <td class="dataset-details">{{ pkg_dict.variables }}</td>
+</tr>
+{% endif %}
 {% if pkg_dict.system %}
 <tr>
   <th scope="row" class="dataset-label">{{ _("System" ) }}</th>
   <td class="dataset-details">{{ pkg_dict.system }}</td>
 </tr>
 {% endif %}
-{% if pkg_dict.variables %}
+{% if pkg_dict.timerange %}
 <tr>
-  <th scope="row" class="dataset-label">{{ _("Variables" ) }}</th>
-  <td class="dataset-details">{{ pkg_dict.variables }}</td>
+  <th scope="row" class="dataset-label">{{ _("Time range" ) }}</th>
+  <td class="dataset-details">{{ pkg_dict.timerange }}</td>
 </tr>
 {% endif %}
 {% endblock %}
