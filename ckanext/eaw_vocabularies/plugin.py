@@ -1,11 +1,16 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 
+import datetime as dt
+
 def eaw_taglist(vocab_name):
     tag_list = tk.get_action('tag_list')
     tags = tag_list(data_dict={'vocabulary_id': vocab_name})
     tags = [{'value': tag} for tag in tags]
     return(tags)
+
+def eaw_getnow():
+    return(dt.date.today().isoformat())
 
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
@@ -65,4 +70,5 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     
     # ITemplateHelpers
     def get_helpers(self):
-        return({'eaw_taglist': eaw_taglist})
+        return({'eaw_taglist': eaw_taglist,
+                'eaw_getnow': eaw_getnow})
