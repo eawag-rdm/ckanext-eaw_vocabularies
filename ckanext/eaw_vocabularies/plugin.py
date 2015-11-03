@@ -3,10 +3,12 @@ import ckan.plugins.toolkit as tk
 
 import datetime as dt
 
-def eaw_taglist(vocab_name):
+def eaw_taglist(vocab_name, pad=False):
     tag_list = tk.get_action('tag_list')
     tags = tag_list(data_dict={'vocabulary_id': vocab_name})
     tags = [{'value': tag} for tag in tags]
+    if pad:
+        tags = [{'value': ' '}] + tags
     return(tags)
 
 def eaw_getnow():
@@ -16,6 +18,7 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
     p.implements(p.IDatasetForm)
     p.implements(p.ITemplateHelpers)
+    p.implements(p.IPackageController, inherit=True)
     
     # IConfigurer
     def update_config(self, config_):
@@ -72,3 +75,32 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def get_helpers(self):
         return({'eaw_taglist': eaw_taglist,
                 'eaw_getnow': eaw_getnow})
+
+    # IPackageController
+    def after_create(self, context, pkg_dict):
+        return(pkg_dict)
+    def after_update(self, context, pkg_dict):
+        return(pkg_dict)
+    def after_delete(self,context, pkg_dict):
+        return(pkg_dict)
+    def after_show(self, context, pkg_dict):
+        return(pkg_dict)
+    def after_search(self, search_results, search_params):
+        return(search_results)
+    def before_index(self, pkg_dict):
+        return(pkg_dict)
+    def before_view(self, pkg_dict):
+        return(pkg_dict)
+    def before_search(self, search_params):
+        print(search_params)
+        # try:
+        #     fqstring = search_params['fq']
+        #     if fqstring == 'vocab_system:" "':
+        #         del search_params['fq']
+        #     else:
+        #         fqstring = " OR ".join(fqstring.split())
+        #         search_params['fq'] = fqstring
+        # except KeyError:
+        #     pass
+        return(search_params)
+    
