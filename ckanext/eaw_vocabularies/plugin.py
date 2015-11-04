@@ -12,6 +12,7 @@ def eaw_taglist(vocab_name, pad=False):
     return(tags)
 
 def eaw_getnow():
+    ''' Current date in ISO 8601'''
     return(dt.date.today().isoformat())
 
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
