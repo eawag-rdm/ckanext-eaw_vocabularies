@@ -1,3 +1,7 @@
+{#
+The search form for dataset search
+#}
+
 {% import 'macros/form.html' as form %}
 
 {% set placeholder = placeholder if placeholder else _('Search datasets...') %}
@@ -12,29 +16,29 @@
     <div class="search-input control-group {{ search_class }}">
       <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" placeholder="{{ placeholder }}">
       {% block search_input_button %}
-      <button type="submit" value="search">
-        <i class="icon-search"></i>
-        <span>{{ _('Submit') }}</span>
-      </button>
+	<button type="submit" value="search">
+          <i class="icon-search"></i>
+          <span>{{ _('Submit') }}</span>
+	</button>
       {% endblock %}
     </div>
   {% endblock %}
-
+  
 
     
-{% set taglist_variables=h.eaw_taglist("variables") %}
-{% set select = c.fields_grouped['vocab_variables'] %}
-{% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
-{{ form.select('vocab_variables', id='field-variables', 
-attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
-label=_('Variables'), options=taglist_variables, selected=select) }}
+  {% set taglist_variables=h.eaw_taglist("variables") %}
+  {% set select = c.fields_grouped['vocab_variables'] %}
+  {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
+  {{ form.select('vocab_variables', id='field-variables', 
+  attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
+  label=_('Variables'), options=taglist_variables, selected=select) }}
+  
 
-
-{% set  select = c.fields_grouped['vocab_system'] %}
-{% set taglist_system=h.eaw_taglist("system", pad=True) %}
-{{ form.select('vocab_system', id='field-system', attrs={"multiple": "multiple", "data-module": "autocomplete"},
-label=_('System'), options=taglist_system, selected=select) }}
-
+  {% set  select = c.fields_grouped['vocab_system'] %}
+  {% set taglist_system=h.eaw_taglist("system", pad=True) %}
+  {{ form.select('vocab_system', id='field-system', attrs={"multiple": "multiple", "data-module": "autocomplete"},
+  label=_('System'), options=taglist_system, selected=select) }}
+  
   {% block search_search_fields %}
     {% if fields -%}
       <span>{{ form.hidden_from_list(fields=fields) }}</span>

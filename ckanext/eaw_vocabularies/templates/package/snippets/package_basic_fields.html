@@ -1,25 +1,28 @@
+{#
+Input of new basic fields when adding or modifying datasets
+#}
+
 {% ckan_extends %}
 
 {% block package_basic_fields_custom %}
-
-{% set taglist=h.eaw_taglist("variables") %}
-{% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
-{% set select = data.get('variables', []) %}
-{{ form.select('variables', id='field-variables',
-attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
-label=_('Variables'), options=h.eaw_taglist("variables"),is_required=true, selected=select) }}
-
-{% set value=data.get('timerange', h.eaw_getnow()) %}
-{{ form.input('timerange', id='field-timerange', label=_('Time range'), type="text", value=value, placeholder='eg. 1989-01-31 TO 2012-12-24', is_required=true) }}
-
-{% set taglist=h.eaw_taglist("system") %}
-{% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
-{% set select = data.get('system', []) | first %}
-{{ form.select('system', id='field-system',
-attrs={"data-module": "autocomplete", "placeholder": placeholder},
-label=_('System'), options=h.eaw_taglist("system"),is_required=true, selected=select) }}
-
-{{ super() }}
+  {% set taglist=h.eaw_taglist("variables") %}
+  {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
+  {% set select = data.get('variables', []) %}
+  {{ form.select('variables', id='field-variables',
+  attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
+  label=_('Variables'), options=h.eaw_taglist("variables"),is_required=true, selected=select) }}
+  
+  {% set value=data.get('timerange', h.eaw_getnow()) %}
+  {{ form.input('timerange', id='field-timerange', label=_('Time range'), type="text", value=value, placeholder='eg. 1989-01-31 TO 2012-12-24', is_required=true) }}
+  
+  {% set taglist=h.eaw_taglist("system") %}
+  {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist[0].value,tag2=taglist[1].value, tag3=taglist[2].value) %}
+  {% set select = data.get('system', []) | first %}
+  {{ form.select('system', id='field-system',
+  attrs={"data-module": "autocomplete", "placeholder": placeholder},
+  label=_('System'), options=h.eaw_taglist("system"),is_required=true, selected=select) }}
+  
+  {{ super() }}
 {% endblock %}
 
 {% block custom_fields %}
