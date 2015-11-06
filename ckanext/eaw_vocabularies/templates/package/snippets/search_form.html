@@ -24,27 +24,27 @@ The search form for dataset search
     </div>
   {% endblock %}
   
-
-    
   {% set taglist_variables=h.eaw_taglist("variables") %}
   {% set select = c.fields_grouped['vocab_variables'] %}
   {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
   {{ form.select('vocab_variables', id='field-variables', 
   attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
   label=_('Variables'), options=taglist_variables, selected=select) }}
+  <input type=hidden value="OR" name="op_vocab_variables" />
   
 
   {% set  select = c.fields_grouped['vocab_system'] %}
   {% set taglist_system=h.eaw_taglist("system", pad=True) %}
   {{ form.select('vocab_system', id='field-system', attrs={"multiple": "multiple", "data-module": "autocomplete"},
   label=_('System'), options=taglist_system, selected=select) }}
-  
+
+ {{ fields }}
   {% block search_search_fields %}
     {% if fields -%}
       <span>{{ form.hidden_from_list(fields=fields) }}</span>
     {%- endif %}
   {% endblock %}
-
+      
   {% block search_sortby %}
     {% if sorting %}
       <div class="form-select control-group control-order-by">

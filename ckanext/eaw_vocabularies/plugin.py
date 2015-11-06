@@ -15,6 +15,14 @@ def eaw_getnow():
     ''' Current date in ISO 8601'''
     return(dt.date.today().isoformat())
 
+def search_params2dict(search_params):
+    '''Converts the search_params 'fq'-value
+    that passed to before_view() to a dict.'''
+    return(dict([e.split(':') for e in search_params['fq'].split()]))
+
+CUSTOM_Q_SEARCHES = ['vocab_variables']
+CUSTOM_OPS = ['op_' + field for field in CUSTOM_Q_SEARCHES]
+
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
     p.implements(p.IDatasetForm)
@@ -78,22 +86,40 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
                 'eaw_getnow': eaw_getnow})
 
     # IPackageController
-    def after_create(self, context, pkg_dict):
-        return(pkg_dict)
-    def after_update(self, context, pkg_dict):
-        return(pkg_dict)
-    def after_delete(self,context, pkg_dict):
-        return(pkg_dict)
-    def after_show(self, context, pkg_dict):
-        return(pkg_dict)
-    def after_search(self, search_results, search_params):
-        return(search_results)
-    def before_index(self, pkg_dict):
-        return(pkg_dict)
-    def before_view(self, pkg_dict):
-        return(pkg_dict)
+    # def after_create(self, context, pkg_dict):
+    #     return(pkg_dict)
+    # def after_update(self, context, pkg_dict):
+    #     return(pkg_dict)
+    # def after_delete(self,context, pkg_dict):
+    #     return(pkg_dict)
+    # def after_show(self, context, pkg_dict):
+    #     return(pkg_dict)
+    # def after_search(self, search_results, search_params):
+    #     return(search_results)
+    # def before_index(self, pkg_dict):
+    #     return(pkg_dict)
+    # def before_view(self, pkg_dict):
+    #     return(pkg_dict)
     def before_search(self, search_params):
-        print(search_params)
+        # the controller puts everything into the value of "fq". Extract
+        # what we want to treat.
+        print("INPUT search_params".format(search_params))
+        fq = search_params2dict(search_params)
+        print(fq)
+        cust_keys = [k for k in fq.keys() if k in CUSTOM_Q_SEARCHES]
+        cust_ops = [k for k in fq.keys() if k in CUSTOM_OPS]
+        ## remove those from search_params' fq-field
+        for k in cust_keys + cust_ops:
+            del fq[k]
+        search_params['fq'] = fq
+        ## add them to q
+        q = search_params['q']
+        
+        
+        
+        
+        # sp_dict = eval(search_params)
+        # print(type(sp_dict))
         # try:
         #     fqstring = search_params['fq']
         #     if fqstring == 'vocab_system:" "':
