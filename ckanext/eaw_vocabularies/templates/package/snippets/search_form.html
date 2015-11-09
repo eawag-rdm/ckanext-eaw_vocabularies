@@ -39,11 +39,11 @@ The search form for dataset search
   label=_('System'), options=taglist_system, selected=select) }}
 
  {{ fields }}
-  {% block search_search_fields %}
-    {% if fields -%}
-      <span>{{ form.hidden_from_list(fields=fields) }}</span>
-    {%- endif %}
-  {% endblock %}
+  {# {% block search_search_fields %} #}
+  {#   {% if fields -%} #}
+  {#     <span>{{ form.hidden_from_list(fields=fields) }}</span> #}
+  {#   {%- endif %} #}
+  {# {% endblock %} #}
       
   {% block search_sortby %}
     {% if sorting %}

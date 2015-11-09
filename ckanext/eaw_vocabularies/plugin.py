@@ -18,7 +18,11 @@ def eaw_getnow():
 def search_params2dict(search_params):
     '''Converts the search_params 'fq'-value
     that passed to before_view() to a dict.'''
-    return(dict([e.split(':') for e in search_params['fq'].split()]))
+    fq_dict = dict([e.split(':') for e in search_params['fq'].split()])
+    # extract special entries
+    myqdict = dict([(k, v) for k, v in fq_dict.iteritems()
+                    if k in CUSTOM_Q_SEARCHES])
+    return(myqdict)
 
 CUSTOM_Q_SEARCHES = ['vocab_variables']
 CUSTOM_OPS = ['op_' + field for field in CUSTOM_Q_SEARCHES]
@@ -103,17 +107,17 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def before_search(self, search_params):
         # the controller puts everything into the value of "fq". Extract
         # what we want to treat.
-        print("INPUT search_params".format(search_params))
+        print("INPUT search_params {}".format(search_params))
         fq = search_params2dict(search_params)
-        print(fq)
-        cust_keys = [k for k in fq.keys() if k in CUSTOM_Q_SEARCHES]
-        cust_ops = [k for k in fq.keys() if k in CUSTOM_OPS]
-        ## remove those from search_params' fq-field
-        for k in cust_keys + cust_ops:
-            del fq[k]
-        search_params['fq'] = fq
-        ## add them to q
-        q = search_params['q']
+        print("EXTRACTED DICTIONARY {}".format(str(fq)))
+        # cust_keys = [k for k in fq.keys() if k in CUSTOM_Q_SEARCHES]
+        # cust_ops = [k for k in fq.keys() if k in CUSTOM_OPS]
+        # ## remove those from search_params' fq-field
+        # for k in cust_keys + cust_ops:
+        #     del fq[k]
+        # search_params['fq'] = fq
+        # ## add them to q
+        # q = search_params['q']
         
         
         
