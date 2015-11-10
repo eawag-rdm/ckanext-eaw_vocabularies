@@ -3,6 +3,12 @@ import ckan.plugins.toolkit as tk
 
 import datetime as dt
 
+## Needs to be put in config eventually. List of fields of
+## custom searches and logical operator to apply among terms with
+## the same field-name
+CUSTOM_SEARCH_FIELDS = ['variables', 'systems']
+CUSTOM_OPS = ['op_' + field for field in CUSTOM_SEARCH_FIELDS]
+
 def eaw_taglist(vocab_name, pad=False):
     tag_list = tk.get_action('tag_list')
     tags = tag_list(data_dict={'vocabulary_id': vocab_name})
@@ -38,19 +44,9 @@ def mk_field_queries(search_params):
             operator = "OR"
         queryterms = [x[1] for x in fq_list if x[0] == f]
         querystring += ' '+f+':('+(' '+operator+' ').join(queryterms)+')'
-        print
-        print("f: {}".format(f))
-        print("terms: {}".format(queryterms))
-        print("qstring: {}".format(querystring))
     search_params['fq'] = querystring
     return(search_params)
             
-## Needs to be put in config eventually. List of fields of
-## custom searches and logical operator to apply among terms with
-## the same field-name
-CUSTOM_SEARCH_FIELDS = ['vocab_variables', 'vocab_system']
-CUSTOM_OPS = ['op_' + field for field in CUSTOM_SEARCH_FIELDS]
-
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
     p.implements(p.IDatasetForm)
@@ -66,8 +62,8 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     # IDatasetform
     def _modify_package_schema(self, schema):
         schema.update({
-            'system': [tk.get_validator('not_missing'),
-                       tk.get_converter('convert_to_tags')('system')],
+            'systems': [tk.get_validator('not_missing'),
+                       tk.get_converter('convert_to_tags')('systems')],
             'variables': [tk.get_validator('not_missing'),
                           tk.get_converter('convert_to_tags')('variables')],
             'timerange': [tk.get_validator('not_missing'),
@@ -89,7 +85,7 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
         schema = super(Eaw_VocabulariesPlugin, self).show_package_schema()
         schema['tags']['__extras'].append(tk.get_converter('free_tags_only'))
         schema.update({
-            'system': [tk.get_converter('convert_from_tags')('system'),
+            'systems': [tk.get_converter('convert_from_tags')('systems'),
                        tk.get_validator('ignore_missing')],
             'variables': [tk.get_converter('convert_from_tags')('variables'),
                           tk.get_validator('ignore_missing')],
@@ -114,26 +110,8 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
                 'eaw_getnow': eaw_getnow})
 
     # IPackageController
-    # def after_create(self, context, pkg_dict):
-    #     return(pkg_dict)
-    # def after_update(self, context, pkg_dict):
-    #     return(pkg_dict)
-    # def after_delete(self,context, pkg_dict):
-    #     return(pkg_dict)
-    # def after_show(self, context, pkg_dict):
-    #     return(pkg_dict)
-    # def after_search(self, search_results, search_params):
-    #     return(search_results)
-    # def before_index(self, pkg_dict):
-    #     return(pkg_dict)
-    # def before_view(self, pkg_dict):
-    #     return(pkg_dict)
     def before_search(self, search_params):
-        # the controller puts everything into the value of "fq". Extract
-        # what we want to treat.
-        print("INPUT search_params {}".format(search_params))
         fq = mk_field_queries(search_params)
-        print("OUTPUT search_params {}".format(str(fq)))
         return(search_params)
 
     
