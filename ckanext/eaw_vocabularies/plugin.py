@@ -111,7 +111,11 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
 
     # IPackageController
     def before_search(self, search_params):
+        print("INPUT:")
+        print(search_params)
         fq = mk_field_queries(search_params)
-        return(search_params)
+        print("OUTPUT:")
+        print(fq)
+        return(fq)
 
     
