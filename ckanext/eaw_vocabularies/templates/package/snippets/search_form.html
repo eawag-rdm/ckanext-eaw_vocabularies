@@ -12,11 +12,11 @@ The search form for dataset search
 {% set form_id = form_id if form_id else false %}
 #}
 
-<hr />
 
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+{% set clear_url =  h.url_for(controller='package', action='search') %}
 
-  <h3>{{ _('Search Datasets') }}</h3>
+  <h3>{{ _('Filter Datasets') }}</h3>
   <div style="display:table;">
     <div style="display:table-cell;">
       {% set taglist_variables=h.eaw_taglist("variables") %}
@@ -66,7 +66,11 @@ The search form for dataset search
   {#     <span>{{ form.hidden_from_list(fields=fields) }}</span> #}
   {#   {%- endif %} #}
   {# {% endblock %} #}
-      
+
+<div class="clear-form-button">
+  <a class="btn" href={{ clear_url }}><i class="icon-large icon-remove-circle"></i>Clear Filter</a>
+</div>
+
   {% block search_sortby %}
     {% if sorting %}
       <div class="form-select control-group control-order-by">
