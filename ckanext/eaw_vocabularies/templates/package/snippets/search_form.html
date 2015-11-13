@@ -28,8 +28,8 @@ The search form for dataset search
     </div>
     <div style="display:table-cell;vertical-align:middle;position:relative;top:12px;">
       {% set values = ['OR', 'AND'] %}
-      {% set select = c.fields_grouped['op_variables']|first %}
-      <select name="op_variables" style="width:5em">
+      {% set select = c.fields_grouped['OP_variables']|first %}
+      <select name="OP_variables" style="width:5em">
 	{% for v in values %}
 	  <option {% if v == select %}selected="selected"{% endif %}>{{ v }}</option>
 	{% endfor %}
@@ -37,6 +37,8 @@ The search form for dataset search
     </div>
   </div>
 
+XXXXX
+<input type="hidden" name="_XXX" value="YES">
   {#
   {% block search_input %}
     <div class="search-input control-group {{ search_class }}">
