@@ -20,7 +20,7 @@ The search form for dataset search
   <div style="display:table;">
     <div style="display:table-cell;">
       {% set taglist_variables=h.eaw_taglist("variables") %}
-      {% set select = c.fields_grouped['variables']|first %}
+      {% set select = c.fields_grouped['variables'] %}
       {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
       {{ form.select('variables', id='field-variables', label=_('Variables'), classes=classes,
   attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
@@ -37,8 +37,13 @@ The search form for dataset search
     </div>
   </div>
 
-XXXXX
-<input type="hidden" name="_XXX" value="YES">
+  {% set  select = c.fields_grouped['systems'] %}
+  {#{% set classes = ['form-horizontal'] %}#}
+  {% set taglist_systems=h.eaw_taglist("systems", pad=True) %}
+  {{ form.select('systems', id='field-systems', classes=classes, attrs={"multiple": "multiple", "data-module": "autocomplete"},
+  label=_('Systems'), options=taglist_systems, selected=select) }}
+
+
   {#
   {% block search_input %}
     <div class="search-input control-group {{ search_class }}">
@@ -55,11 +60,6 @@ XXXXX
   
  
 
-  {% set  select = c.fields_grouped['systems'] %}
-  {#{% set classes = ['form-horizontal'] %}#}
-  {% set taglist_systems=h.eaw_taglist("systems", pad=True) %}
-  {{ form.select('systems', id='field-systems', classes=classes, attrs={"multiple": "multiple", "data-module": "autocomplete"},
-  label=_('Systems'), options=taglist_systems, selected=select) }}
 
   {# {% block search_search_fields %} #}
   {#   {% if fields -%} #}
