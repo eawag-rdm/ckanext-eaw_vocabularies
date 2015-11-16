@@ -27,6 +27,9 @@ def eaw_get_facetfields():
     facetfields = [f for f in tk.c.fields if f[0] in tk.c.facet_titles.keys()]
     return(facetfields)
 
+def eaw_get_facetnames():
+    return(list(set([ff[0] for ff in eaw_get_facetfields()])))
+
 def mk_field_queries(search_params, vocabfields):
     '''
     Customizes the fq-search-string so that query-terms
@@ -136,7 +139,8 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def get_helpers(self):
         return({'eaw_taglist': eaw_taglist,
                 'eaw_getnow': eaw_getnow,
-                'eaw_get_facetfields': eaw_get_facetfields
+                'eaw_get_facetfields': eaw_get_facetfields,
+                'eaw_get_facetnames': eaw_get_facetnames
         })
 
     # IPackageController

@@ -98,9 +98,11 @@ The search form for dataset search
   {% endblock %}
 
   {% block search_facets %}
-    {% if facets %}
+    {% set facet_names = h.eaw_get_facetnames() %}
+    {{ facet_names }}
+    {% if facet_names %}
       <p class="filter-list">
-        {% for field in facets.fields %}
+        {% for field in facet_names %}
           {% set search_facets_items = facets.search.get(field)['items'] %}
           <span class="facet">{{ facets.titles.get(field) }}:</span>
           {% for value in facets.fields[field] %}
