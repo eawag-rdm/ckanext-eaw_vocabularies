@@ -9,7 +9,7 @@ import datetime as dt
 CUSTOM_SEARCH_FIELDS = ['variables', 'systems']
 CUSTOM_OPS = ['OP_' + field for field in CUSTOM_SEARCH_FIELDS]
 
-
+# template helper functions
 def eaw_taglist(vocab_name, pad=False):
     tag_list = tk.get_action('tag_list')
     tags = tag_list(data_dict={'vocabulary_id': vocab_name})
@@ -21,6 +21,11 @@ def eaw_taglist(vocab_name, pad=False):
 def eaw_getnow():
     ''' Current date in ISO 8601'''
     return(dt.date.today().isoformat())
+
+def eaw_get_facetfields():
+    '''Returns (name, value) list of facet_fields'''
+    facetfields = [f for f in tk.c.fields if f[0] in tk.c.facet_titles.keys()]
+    return(facetfields)
 
 def mk_field_queries(search_params, vocabfields):
     '''
@@ -66,29 +71,6 @@ def mk_field_queries(search_params, vocabfields):
     return(search_params)
     
     
-    # uniq_fields =  list(set([x[0] for x in fq_list]))
-
-    # uniq_fields = [(uf, _get_operator(uf)) for uf in uniq_fields]
-    # queryterms = [f[1] for f in fq_list
-        
-        
-    #     print("OPERATOR for {}: {}".format(f,operator))
-    #     queryterms = [x[1] for x in fq_list if x[0] == f] 
-    #     querystring += ' '+f+':('+(' '+operator+' ').join(queryterms)+')'
-
-    # # prefix vocabulary fields
-    # fq_list = [["vocab_"+f[0], f[1]] if f[0] in vocabfields
-    #            else f for f in fq_list]
-    # print("fq_list: {}".format(fq_list))
-    
-    
-    
-    
-    # querystring = ''
-    # print("OPERATOR_FIELDS: {}".format(operator_fields))
-
-    # search_params['fq'] = querystring
-    # return(search_params)
             
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
@@ -153,7 +135,9 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     # ITemplateHelpers
     def get_helpers(self):
         return({'eaw_taglist': eaw_taglist,
-                'eaw_getnow': eaw_getnow})
+                'eaw_getnow': eaw_getnow,
+                'eaw_get_facetfields': eaw_get_facetfields
+        })
 
     # IPackageController
     def before_search(self, search_params):
@@ -162,6 +146,8 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
         sp = mk_field_queries(search_params, self._vocab_fields)
         print("OUTPUT:")
         print(sp)
+        print("FACETFIELDS")
+        print(eaw_get_facetfields())
         return(sp)
 
     
