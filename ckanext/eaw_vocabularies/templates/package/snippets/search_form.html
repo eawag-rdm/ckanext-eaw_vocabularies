@@ -13,7 +13,7 @@ The search form for dataset search
 #}
 
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-taget="radio">
 {% set clear_url =  h.url_for(controller='package', action='search') %}
 
   <h3>{{ _('Filter Datasets') }}</h3>
@@ -26,14 +26,17 @@ The search form for dataset search
   attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
       options=taglist_variables, selected=select) }}
     </div>
-    <div style="display:table-cell;vertical-align:middle;position:relative;top:12px;">
+    <div style="display:table-cell;vertical-align:middle;position:relative;">
       {% set values = ['OR', 'AND'] %}
-      {% set select = c.fields_grouped['OP_variables']|first %}
-      <select name="OP_variables" style="width:5em">
+      {% set checked = c.fields_grouped['OP_variables']|first %}
+      {# <select name="OP_variables" style="width:5em"> #}
+	<fieldset>
 	{% for v in values %}
-	  <option {% if v == select %}selected="selected"{% endif %}>{{ v }}</option>
+	  <input type="radio" id={{ v }} name="OP_variables" value={{ v }} {% if v == checked %}checked="checked"{% endif %}
+	  value={{ v }} /><label for={{ v }}>{{ v }}</label>
 	{% endfor %}
-      </select>
+	</fieldset>
+      {# </select> #}
     </div>
   </div>
 
