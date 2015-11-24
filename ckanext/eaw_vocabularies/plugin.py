@@ -88,7 +88,7 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def update_config(self, config_):
         tk.add_template_directory(config_, 'templates')
         #tk.add_public_directory(config_, 'public')
-        #toolkit.add_resource('fanstatic', 'eaw_vocabularies')
+        tk.add_resource('fanstatic', 'bootstrap-switch')
 
     # IDatasetform
     def _modify_package_schema(self, schema):

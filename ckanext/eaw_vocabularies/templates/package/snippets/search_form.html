@@ -3,6 +3,10 @@ The search form for dataset search
 #}
 
 {% import 'macros/form.html' as form %}
+{% resource 'bootstrap-switch/bootstrap-switch.js' %}
+{% resource 'bootstrap-switch/bootstrap-switch.css' %}
+{% resource 'bootstrap-switch/andorswitch.js' %}
+  
 
 {#
 {% set placeholder = placeholder if placeholder else _('Search datasets...') %}
@@ -30,7 +34,7 @@ The search form for dataset search
       {% set values = ['OR', 'AND'] %}
       {% set checked = c.fields_grouped['OP_variables']|first %}
       {# <select name="OP_variables" style="width:5em"> #}
-	<fieldset>
+	<fieldset data-module="andorswitch">
 	{% for v in values %}
 	  <input type="radio" id={{ v }} name="OP_variables" value={{ v }} {% if v == checked %}checked="checked"{% endif %}
 	  value={{ v }} /><label for={{ v }}>{{ v }}</label>
@@ -137,3 +141,4 @@ The search form for dataset search
     <p><strong>There was an error while searching.</strong> Please try again.</p>
   {% endtrans %}
 {% endif %}
+
