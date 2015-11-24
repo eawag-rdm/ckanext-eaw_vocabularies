@@ -13,7 +13,7 @@ The search form for dataset search
 #}
 
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-taget="radio">
+<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="select, fieldset">
 {% set clear_url =  h.url_for(controller='package', action='search') %}
 
   <h3>{{ _('Filter Datasets') }}</h3>
