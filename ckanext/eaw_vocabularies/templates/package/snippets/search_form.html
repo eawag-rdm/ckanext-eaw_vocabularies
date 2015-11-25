@@ -17,39 +17,94 @@ The search form for dataset search
 #}
 
 
+{# A generic input_block for providing the default markup for CKAN form elements. #}
+{# It is expected to be called using a {% call %} block, the contents of which #}
+{# will be inserted into the .controls element. #}
+
+{# for     - The id for the input that the label should match. #}
+{# label   - A human readable label. #}
+{# error   - A list of error strings for the field or just true. #}
+{# classes - An array of custom classes for the outer element. #}
+{# control_classes - An array of custom classes for the .control wrapper. #}
+{# extra_html - An html string to be inserted after the errors eg. info text. #}
+{# is_required - Boolean of whether this input is requred for the form to validate #}
+
+{# Example: #}
+
+{#   {% import 'macros/form.html' as form %} #}
+{#   {% call form.input_block("field", "My Field") %} #}
+{#     <input id="field" type="text" name="{{ name }}" value="{{ value | empty_and_escape }}" /> #}
+{#   {% endcall %} #}
+
+
+{# {% macro input_block(for, label="", error="", classes=[], control_classes=[], extra_html="", is_required=false) %} #}
+{#   <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}"> #}
+{#     <label class="control-label" for="{{ for }}">{% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}{{ label or _('Custom') }}</label> #}
+{#     <div class="controls{{ " " ~ control_classes | join(' ') }}"> #}
+{#       {{ caller() }} #}
+{#       {% if error and error is iterable %}<span class="error-block">{{ error|join(', ') }}</span>{% endif %} #}
+{#       {{ extra_html }} #}
+{#     </div> #}
+{#   </div> #}
+{# {% endmacro %} #}
+
+
+
+
+{# {% macro select(name, id='', label='', options='', selected='', error='', classes=[], attrs={}, is_required=false) %} #}
+{#   {% set classes = (classes|list) %} #}
+{#   {% do classes.append('control-select') %} #}
+{#   {% if selected is string %}{% set selected = [selected] %}{% endif %} #}
+
+{#   {%- set extra_html = caller() if caller -%} #}
+{#   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %} #}
+{#     <select id="{{ id or name }}" name="{{ name }}" {{ attributes(attrs) }}> #}
+{#       {% for option in options %} #}
+{#         <option value="{{ option.value }}"{% if option.value in selected %} selected="selected"{% endif %}>{{ option.text or option.value }}</option> #}
+{#       {% endfor %} #}
+{#     </select> #}
+{#   {% endcall %} #}
+{# {% endmacro %} #}
+
+
+
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="select, fieldset">
 {% set clear_url =  h.url_for(controller='package', action='search') %}
-
   <h3>{{ _('Filter Datasets') }}</h3>
   <div style="display:table;">
     <div style="display:table-cell;">
       {% set taglist_variables=h.eaw_taglist("variables") %}
       {% set select = c.fields_grouped['variables'] %}
-      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'|format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
-      {{ form.select('variables', id='field-variables', label=_('Variables'), classes=classes,
-  attrs={"multiple": "multiple", "data-module": "autocomplete", "placeholder": placeholder},
-      options=taglist_variables, selected=select) }}
+      {% set id = "field-variables"%}
+      {% set name = "variables" %}
+      {% set attrs = 'multiple="multiple" data-module="autocomplete" placeholder="placeholder"' %}
+      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
+      |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
+      <div class="control-group control-select">
+	<div class="controls">
+	  <select id="{{ id }}" name="{{ name }}" {{ attrs }}>
+	    {% for option in taglist_variables %}
+              <option value="{{ option.value }}"{% if option.value in select %} selected="selected"{% endif %}>{{ option.text or option.value }}</option>
+	    {% endfor %}
+	  </select>
+	</div>
+      </div>
     </div>
     <div style="display:table-cell;vertical-align:middle;position:relative;">
-      {% set values = ['OR', 'AND'] %}
-      {% set checked = c.fields_grouped['OP_variables']|first %}
-      {# <select name="OP_variables" style="width:5em"> #}
-	<fieldset data-module="andorswitch">
-	{% for v in values %}
-	  <input type="radio" id={{ v }} name="OP_variables" value={{ v }} {% if v == checked %}checked="checked"{% endif %}
-	  value={{ v }} /><label for={{ v }}>{{ v }}</label>
-	{% endfor %}
-	</fieldset>
-      {# </select> #}
+      {% set selected = c.fields_grouped['OP_variables']|first %}
+      <fieldset>
+	<input type="checkbox" data-module="andorswitch" id="and-or" name="OP_variables"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>
+      </fieldset>
     </div>
   </div>
-
+  
   {% set  select = c.fields_grouped['systems'] %}
   {#{% set classes = ['form-horizontal'] %}#}
-  {% set taglist_systems=h.eaw_taglist("systems", pad=True) %}
+  {% set taglist_systems=h.eaw_taglist("systems") %}
   {{ form.select('systems', id='field-systems', classes=classes, attrs={"multiple": "multiple", "data-module": "autocomplete"},
   label=_('Systems'), options=taglist_systems, selected=select) }}
-
+  
 
   {#
   {% block search_input %}
