@@ -6,69 +6,8 @@ The search form for dataset search
 {% resource 'bootstrap-switch/bootstrap-switch.js' %}
 {% resource 'bootstrap-switch/bootstrap-switch.css' %}
 {% resource 'eaw_theme/andorswitch.js' %}
-  
 
-{#
-{% set placeholder = placeholder if placeholder else _('Search datasets...') %}
-{% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
-{% set search_class = search_class if search_class else 'search-giant' %}
-{% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
-{% set form_id = form_id if form_id else false %}
-#}
-
-
-{# A generic input_block for providing the default markup for CKAN form elements. #}
-{# It is expected to be called using a {% call %} block, the contents of which #}
-{# will be inserted into the .controls element. #}
-
-{# for     - The id for the input that the label should match. #}
-{# label   - A human readable label. #}
-{# error   - A list of error strings for the field or just true. #}
-{# classes - An array of custom classes for the outer element. #}
-{# control_classes - An array of custom classes for the .control wrapper. #}
-{# extra_html - An html string to be inserted after the errors eg. info text. #}
-{# is_required - Boolean of whether this input is requred for the form to validate #}
-
-{# Example: #}
-
-{#   {% import 'macros/form.html' as form %} #}
-{#   {% call form.input_block("field", "My Field") %} #}
-{#     <input id="field" type="text" name="{{ name }}" value="{{ value | empty_and_escape }}" /> #}
-{#   {% endcall %} #}
-
-
-{# {% macro input_block(for, label="", error="", classes=[], control_classes=[], extra_html="", is_required=false) %} #}
-{#   <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}"> #}
-{#     <label class="control-label" for="{{ for }}">{% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}{{ label or _('Custom') }}</label> #}
-{#     <div class="controls{{ " " ~ control_classes | join(' ') }}"> #}
-{#       {{ caller() }} #}
-{#       {% if error and error is iterable %}<span class="error-block">{{ error|join(', ') }}</span>{% endif %} #}
-{#       {{ extra_html }} #}
-{#     </div> #}
-{#   </div> #}
-{# {% endmacro %} #}
-
-
-
-
-{# {% macro select(name, id='', label='', options='', selected='', error='', classes=[], attrs={}, is_required=false) %} #}
-{#   {% set classes = (classes|list) %} #}
-{#   {% do classes.append('control-select') %} #}
-{#   {% if selected is string %}{% set selected = [selected] %}{% endif %} #}
-
-{#   {%- set extra_html = caller() if caller -%} #}
-{#   {% call input_block(id or name, label or name, error, classes, extra_html=extra_html, is_required=is_required) %} #}
-{#     <select id="{{ id or name }}" name="{{ name }}" {{ attributes(attrs) }}> #}
-{#       {% for option in options %} #}
-{#         <option value="{{ option.value }}"{% if option.value in selected %} selected="selected"{% endif %}>{{ option.text or option.value }}</option> #}
-{#       {% endfor %} #}
-{#     </select> #}
-{#   {% endcall %} #}
-{# {% endmacro %} #}
-
-
-
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="select, fieldset">
+<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="">
 {% set clear_url =  h.url_for(controller='package', action='search') %}
   <h3>{{ _('Filter Datasets') }}</h3>
   {% set taglist_variables=h.eaw_taglist("variables") %}
@@ -83,19 +22,20 @@ The search form for dataset search
 
   <h4>{{ _('Variables') }}</h4>
 
-  <div class="control-group control-select"> {# style="display:table;">#}
-    <div class="controls"> {#style="display:table-cell;"#}
+  <div class="control-group control-select">
+    <div class="controls">
       <select id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	{% for option in taglist_variables %}
           <option value="{{ option.value }}"{% if option.value in select %} selected="selected"{% endif %}>{{ option.text or option.value }}</option>
 	{% endfor %}
       </select>
     </div>
-    <div> {#display:table-cell;style="vertical-align:middle;padding:20px;"#}
+    <div>
       {% set selected = c.fields_grouped['OP_variables']|first %}
       <fieldset class="andorcheck">
-	<label for="and-or"><input type="checkbox" data-module="andorswitch" id="and-or" name="OP_variables"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>find ANY</label> {# #}
+	<label for="and-or"><span class="js-hide">find ANY</span></label>
+	<input type="checkbox" onchange="$('#dataset-search-form').submit();" id="and-or" name="OP_variables" data-module="andorswitch"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}> {# #}
       </fieldset>
     </div>
   </div>
