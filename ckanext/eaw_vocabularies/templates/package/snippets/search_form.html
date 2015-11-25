@@ -71,30 +71,31 @@ The search form for dataset search
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="select, fieldset">
 {% set clear_url =  h.url_for(controller='package', action='search') %}
   <h3>{{ _('Filter Datasets') }}</h3>
-  <div style="display:table;">
-    <div style="display:table-cell;">
-      {% set taglist_variables=h.eaw_taglist("variables") %}
-      {% set select = c.fields_grouped['variables'] %}
-      {% set id = "field-variables"%}
-      {% set name = "variables" %}
-      {% set attrs = 'multiple="multiple" data-module="autocomplete" placeholder="placeholder"' %}
-      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
-      |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
-      <div class="control-group control-select">
-	<div class="controls">
-	  <select id="{{ id }}" name="{{ name }}" {{ attrs }}>
-	    {% for option in taglist_variables %}
-              <option value="{{ option.value }}"{% if option.value in select %} selected="selected"{% endif %}>{{ option.text or option.value }}</option>
-	    {% endfor %}
-	  </select>
-	</div>
-      </div>
+  {% set taglist_variables=h.eaw_taglist("variables") %}
+  {% set select = c.fields_grouped['variables'] %}
+  {% set id = "field-variables"%}
+  {% set name = "variables" %}
+  {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
+    |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
+  {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~ 'placeholder="' ~ placeholder ~'"'  %}
+  
+
+
+  <h4>{{ _('Variables') }}</h4>
+
+  <div class="control-group control-select"> {# style="display:table;">#}
+    <div class="controls"> {#style="display:table-cell;"#}
+      <select id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+	{% for option in taglist_variables %}
+          <option value="{{ option.value }}"{% if option.value in select %} selected="selected"{% endif %}>{{ option.text or option.value }}</option>
+	{% endfor %}
+      </select>
     </div>
-    <div style="display:table-cell;vertical-align:middle;position:relative;">
+    <div> {#display:table-cell;style="vertical-align:middle;padding:20px;"#}
       {% set selected = c.fields_grouped['OP_variables']|first %}
-      <fieldset>
-	<input type="checkbox" data-module="andorswitch" id="and-or" name="OP_variables"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>
+      <fieldset class="andorcheck">
+	<label for="and-or"><input type="checkbox" data-module="andorswitch" id="and-or" name="OP_variables"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>find ANY</label> {# #}
       </fieldset>
     </div>
   </div>
