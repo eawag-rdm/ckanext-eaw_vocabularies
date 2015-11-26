@@ -54,8 +54,6 @@ def mk_field_queries(search_params, vocabfields):
         
     fq_list = [e.split(':') for e in search_params['fq'].split()]
     operator_fields = dict([x for x in fq_list if x[0].startswith('OP_')])
-    # Assert only one operator per field
-    assert (len(operator_fields) == len(set([x[0] for x in operator_fields])))
     # remove OP_* fields from query
     fq_list = [f for f in fq_list if f[0] not in operator_fields.keys()]
     # build pre-query-strings
