@@ -26,16 +26,18 @@ The search form for dataset search
     <div class="controls">
       <select id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	{% for option in taglist_variables %}
-          <option value="{{ option.value }}"{% if option.value in select %} selected="selected"{% endif %}>{{ option.text or option.value }}</option>
+        <option value="{{ option.value }}"{% if option.value in select %}
+		selected="selected"{% endif %}>{{ option.text or option.value }}</option>
 	{% endfor %}
       </select>
     </div>
     <div>
       {% set selected = c.fields_grouped['OP_variables']|first %}
       <fieldset class="andorcheck">
-	<label for="and-or"><span class="js-hide">find ANY</span></label>
-	<input type="checkbox" onchange="$('#dataset-search-form').submit();" id="and-or" name="OP_variables" data-module="andorswitch"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}> {# #}
+	{# <label for="and-or"><span class="js-hide">find ANY</span></label> #}
+	<input type="checkbox" onchange="$('#dataset-search-form').submit();"
+	       id="and-or" name="OP_variables" data-module="andorswitch"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>
       </fieldset>
     </div>
   </div>
@@ -43,14 +45,16 @@ The search form for dataset search
   {% set  select = c.fields_grouped['systems'] %}
   {#{% set classes = ['form-horizontal'] %}#}
   {% set taglist_systems=h.eaw_taglist("systems") %}
-  {{ form.select('systems', id='field-systems', classes=classes, attrs={"multiple": "multiple", "data-module": "autocomplete"},
+  {{ form.select('systems', id='field-systems', classes=classes,
+  attrs={"multiple": "multiple", "data-module": "autocomplete"},
   label=_('Systems'), options=taglist_systems, selected=select) }}
   
 
   {#
   {% block search_input %}
     <div class="search-input control-group {{ search_class }}">
-      <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" placeholder="{{ placeholder }}">
+      <input type="text" class="search" name="q" value="{{ query }}"
+	     autocomplete="off" placeholder="{{ placeholder }}">
       {% block search_input_button %}
 	<button type="submit" value="search">
           <i class="icon-search"></i>
@@ -73,7 +77,8 @@ The search form for dataset search
   
       
 <div class="clear-form-button">
-  <a class="btn" href={{ clear_url }}><i class="icon-large icon-remove-circle"></i>Clear Filter</a>
+  <a class="btn" href={{ clear_url }}>
+    <i class="icon-large icon-remove-circle"></i>Clear Filter</a>
 </div>
 
   {% block search_sortby %}
@@ -83,7 +88,8 @@ The search form for dataset search
         <select id="field-order-by" name="sort">
           {% for label, value in sorting %}
             {% if label and value %}
-              <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
+              <option value="{{ value }}"{% if sorting_selected == value %}
+		      selected="selected"{% endif %}>{{ label }}</option>
             {% endif %}
           {% endfor %}
         </select>
@@ -115,7 +121,9 @@ The search form for dataset search
               {%- else -%}
                 {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
               {%- endif %}
-              <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+              <a href="{{ facets.remove_field(field, value) }}"
+		 class="remove" title="{{ _('Remove') }}">
+		 <i class="icon-remove"></i></a>
             </span>
           {% endfor %}
         {% endfor %}
