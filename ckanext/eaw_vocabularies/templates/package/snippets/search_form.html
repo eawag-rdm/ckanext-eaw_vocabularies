@@ -7,47 +7,47 @@ The search form for dataset search
 {% resource 'bootstrap-switch/bootstrap-switch.css' %}
 {% resource 'eaw_theme/andorswitch.js' %}
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" data-module-target="">
-{% set clear_url =  h.url_for(controller='package', action='search') %}
-  <h3>{{ _('Filter Datasets') }}</h3>
-  {% set taglist_variables=h.eaw_taglist("variables") %}
-  {% set select = c.fields_grouped['variables'] %}
-  {% set id = "field-variables"%}
-  {% set name = "variables" %}
-  {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
-    |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value, tag3=taglist_variables[2].value) %}
-  {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~ 'placeholder="' ~ placeholder ~'"'  %}
-  
+<h3>{{ _('Filter Datasets') }}</h3>
 
+<form {% if form_id %}id="{{ form_id }}" {% endif %}
+      class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %}"
+      method="get" data-module="select-switch"
+      data-module-target="select">
+      {% set clear_url =  h.url_for(controller='package', action='search') %}
 
-  <h4>{{ _('Variables') }}</h4>
-
-  <div class="control-group control-select">
-    <div class="controls">
-      <select id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
-	{% for option in taglist_variables %}
-        <option value="{{ option.value }}"{% if option.value in select %}
-		selected="selected"{% endif %}>{{ option.text or option.value }}</option>
-	{% endfor %}
-      </select>
-    </div>
-    <div>
+      {% set taglist_variables=h.eaw_taglist("variables") %}
+      {% set select = c.fields_grouped['variables'] %}
+      {% set id = "field-variables"%}
+      {% set name = "variables" %}
+      {% set title = _('Variables') %}
+      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
+      |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
+      tag3=taglist_variables[2].value) %}
+      {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
+      'placeholder="' ~ placeholder ~'"'  %}
       {% set selected = c.fields_grouped['OP_variables']|first %}
-      <fieldset class="andorcheck">
-	{# <label for="and-or"><span class="js-hide">find ANY</span></label> #}
-	<input type="checkbox" onchange="$('#dataset-search-form').submit();"
-	       id="and-or" name="OP_variables" data-module="andorswitch"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %}>
-      </fieldset>
-    </div>
-  </div>
-  
-  {% set  select = c.fields_grouped['systems'] %}
-  {#{% set classes = ['form-horizontal'] %}#}
-  {% set taglist_systems=h.eaw_taglist("systems") %}
-  {{ form.select('systems', id='field-systems', classes=classes,
-  attrs={"multiple": "multiple", "data-module": "autocomplete"},
-  label=_('Systems'), options=taglist_systems, selected=select) }}
+      <div>
+	<select style="height:8em;overflow:auto;" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+	  {% for option in taglist_variables %}
+            <option value="{{ option.value }}"{% if option.value in select %}
+		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
+		  {% endfor %}
+	</select>
+	<label class="checkbox">
+	  <input type="checkbox" onchange="$('#dataset-search-form').submit();"
+		 id="and-or" name="OP_variables" data-module="andorswitch"
+		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
+		 <span class="js-hide">find ANY</span>
+	</label>
+      </div>
+	  
+
+  {# {% set  select = c.fields_grouped['systems'] %}  #}
+  {# {\#{% set classes = ['form-horizontal'] %}#\}  #}
+  {# {% set taglist_systems=h.eaw_taglist("systems") %}  #}
+  {# {{ form.select('systems', id='field-systems', classes=classes,  #}
+  {# attrs={"multiple": "multiple", "data-module": "autocomplete"},  #}
+  {# label=_('Systems'), options=taglist_systems, selected=select) }}  #}
   
 
   {#
@@ -65,21 +65,22 @@ The search form for dataset search
   {% endblock %}
   #}
   
-  {% set facet_fields = h.eaw_get_facetfields() %} 
-  FACET NAMES: {{ facet_fields }} 
-  <p> 
-  FIELDS: {{ fields }} 
+  {# {% set facet_fields = h.eaw_get_facetfields() %}  #}
+  {# FACET NAMES: {{ facet_fields }}  #}
+  {# <p>  #}
+  {# FIELDS: {{ fields }}  #}
+  
   {% block search_search_fields %}  
   {% if facet_fields -%}    
     <span>{{ form.hidden_from_list(fields=facet_fields) }}</span>    
   {%- endif %}    
   {% endblock %}  
   
-      
-<div class="clear-form-button">
-  <a class="btn" href={{ clear_url }}>
+  <div class="clear-form-button">
+    <a class="btn" href={{ clear_url }}>
     <i class="icon-large icon-remove-circle"></i>Clear Filter</a>
-</div>
+  </div>
+
 
   {% block search_sortby %}
     {% if sorting %}
@@ -99,6 +100,8 @@ The search form for dataset search
       </div>
     {% endif %}
   {% endblock %}
+
+
 
   {% block search_title %}
     {% if not no_title %}
