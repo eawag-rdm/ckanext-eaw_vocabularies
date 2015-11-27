@@ -12,17 +12,16 @@ The search form for dataset search
   {% set form_id="dataset-search-form" %}
 {% endif %}
 <form id="{{ form_id }}"
-      class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %}"
+      class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %} search-form"
       method="get" data-module="select-switch"
-      data-module-target="select">
-      {% set clear_url =  h.url_for(controller='package', action='search') %}
-
-      {% set taglist_variables=h.eaw_taglist("variables") %}
-      {% set select = c.fields_grouped['variables'] %}
-      {% set id = "field-variables"%}
-      {% set name = "variables" %}
-      {% set title = _('Variables') %}
-      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
+      data-module-target="select">  
+      {%- set clear_url =  h.url_for(controller='package', action='search') %}
+      {%- set taglist_variables=h.eaw_taglist("variables") %}
+      {%- set select = c.fields_grouped['variables'] %}
+      {%- set id = "field-variables"%}
+      {%- set name = "variables" %}
+      {%- set title = _('Variables') %}
+      {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
       |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
       tag3=taglist_variables[2].value) %}
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
@@ -44,17 +43,17 @@ The search form for dataset search
 		 <span class="js-hide">find ANY</span>
 	       </label>
       </div>
-      {% set taglist_variables=h.eaw_taglist("systems") %}
-      {% set select = c.fields_grouped['systems'] %}
-      {% set id = "field-systems"%}
-      {% set name = "systems" %}
-      {% set title = _('Systems') %}
-      {% set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
+      {%- set taglist_variables=h.eaw_taglist("systems") %}
+      {%- set select = c.fields_grouped['systems'] %}
+      {%- set id = "field-systems"%}
+      {%- set name = "systems" %}
+      {%- set title = _('Systems') %}
+      {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
       |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
       tag3=taglist_variables[2].value) %}
-      {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
+      {%- set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {% set selected = c.fields_grouped['OP_systems']|first %}
+      {%- set selected = c.fields_grouped['OP_systems']|first %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -70,23 +69,27 @@ The search form for dataset search
 		 <span class="js-hide">find ANY</span>
 	</label>
       </div>
-   
+<p></p>
+{# <ul class="nav nav-list">  #}
+{#   <li class="divider"></li>  #}
+{# </ul>  #}
 
-    {# <div class="search-input control-group {{ search_class }}"> #}
-    {#   <input type="text" class="search" name="q" value="{{ query }}" #}
-    {# 	     autocomplete="off" placeholder="{{ placeholder }}"> #}
-    {#   {% block search_input_button %} #}
-    {# 	<button type="submit" value="search"> #}
-    {#       <i class="icon-search"></i> #}
-    {#       <span>{{ _('Search') }}</span> #}
-    {# 	</button> #}
-    {#   {% endblock %} #}
-    {# </div> #}
-  
-  {# {% set facet_fields = h.eaw_get_facetfields() %}  #}
-  {# FACET NAMES: {{ facet_fields }}  #}
-  {# <p>  #}
-  {# FIELDS: {{ fields }}  #}
+
+<button class="btn btn-mini" type="button" style="width:320px;margin:0px;" onClick="$( '.togglesearch' ).toggle();">
+  <i class="icon-chevron-down pull-left"> Advanced Search</i></button> 
+<div class="togglesearch search-geant search-input control-group" style="display:none;">
+  <div class= "presearchboxtext">
+  You can use the <a target="_blank"
+  href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">Solr query syntax </a> here.
+    For starters, just type any term to search for it across all fields in all packages.
+  </div>
+    <input type="text" class="search" name="q" value="{{ query }}"   
+    	   autocomplete="off" placeholder="type query ...">   
+	   <button type="submit" value="search">   
+	     <i class="icon-search"></i>   
+	     <span>{{ _('Search') }}</span>   
+    	   </button>   
+  </div>  
   
   {% block search_search_fields %}  
   {% if facet_fields -%}    
@@ -94,40 +97,28 @@ The search form for dataset search
   {%- endif %}    
   {% endblock %}  
   
-<div class="row">
-
-
-  {% block search_sortby %}
-  {% if sorting %}
-      <div class="form-select control-group control-order-by pull-left">
-      <label for="field-order-by">{{ _('Order by') }}</label>
-      <select id="field-order-by" name="sort">
+  
+  <div class="form-select control-group control-order-by">
+    {% if sorting %}
+    <label for="field-order-by">{{ _('Order by') }}</label>
+    <select id="field-order-by" name="sort">
         {% for label, value in sorting %}
-            {%- if label and value %}
-              <option value="{{ value }}" {%- if sorting_selected == value %}
-		      selected="selected"{%- endif %}>{{ label }}
-	      </option>
-        {% endif %}
+          {%- if label and value %}
+            <option value="{{ value }}" {%- if sorting_selected == value %}
+		    selected="selected"{%- endif %}>{{ label }}
+	    </option>
+          {% endif %}
         {% endfor %}
       </select>
-      
-      {% block search_sortby_button %}
-      <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
-      {% endblock %}
-      </div>
     {% endif %}
     <div class="btn-group pull-right" role="group">
       <button class="btn js-hide hidden_submit_btn" type="submit"><i class="icon-search"></i>{{ _('Filter') }}</button>
       <a class="btn clear-form-button" href={{ clear_url }}>
 	<i class="icon-ban-circle"></i>{{ _('Clear') }}</a>
     </div>
-    {% endblock %}
-</div>
+  </div>
 
  
-<ul class="nav nav-list">
-  <li class="divider"></li>
-</ul>
 
 
   {% block search_title %}
