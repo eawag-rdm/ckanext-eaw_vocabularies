@@ -8,11 +8,13 @@ The search form for dataset search
 {% resource 'eaw_theme/andorswitch.js' %}
 
 <h3>{{ _('Filter Datasets') }}</h3>
-
-<form {% if form_id %}id="{{ form_id }}" {% endif %}
+{% if form_id is not defined %}
+  {% set form_id="dataset-search-form" %}
+{% endif %}
+<form id="{{ form_id }}"
       class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %}"
       method="get" data-module="select-switch"
-      data-module-target="select">
+      data-module-target="select, #and-or">
       {% set clear_url =  h.url_for(controller='package', action='search') %}
 
       {% set taglist_variables=h.eaw_taglist("variables") %}
@@ -34,14 +36,14 @@ The search form for dataset search
 		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
 		  {% endfor %}
 	</select>
-	<label class="checkbox">
-	  <input type="checkbox" onchange="$('#dataset-search-form').submit();"
-		 id="and-or" name="OP_variables" data-module="andorswitch"
-		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
+	
+	<input type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
+	       id="and-or" name="OP_variables" data-module="andorswitch"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
+	       <label class="checkbox">
 		 <span class="js-hide">find ANY</span>
-	</label>
+	       </label>
       </div>
-
       {% set taglist_variables=h.eaw_taglist("systems") %}
       {% set select = c.fields_grouped['systems'] %}
       {% set id = "field-systems"%}
@@ -62,7 +64,7 @@ The search form for dataset search
 		  {% endfor %}
 	</select>
 	<label class="checkbox">
-	  <input type="checkbox" onchange="$('#dataset-search-form').submit();"
+	  <input type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
 		 id="and-or" name="OP_systems" data-module="andorswitch"
 		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
 		 <span class="js-hide">find ANY</span>
