@@ -14,7 +14,7 @@ The search form for dataset search
 <form id="{{ form_id }}"
       class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %}"
       method="get" data-module="select-switch"
-      data-module-target="select, #and-or">
+      data-module-target="select">
       {% set clear_url =  h.url_for(controller='package', action='search') %}
 
       {% set taglist_variables=h.eaw_taglist("variables") %}
@@ -28,9 +28,9 @@ The search form for dataset search
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
       {% set selected = c.fields_grouped['OP_variables']|first %}
-      <h4>{{ title }}</h4>
+      <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
-	<select style="height:8em;overflow:auto;" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	  {% for option in taglist_variables %}
             <option value="{{ option.value }}"{% if option.value in select %}
 		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
@@ -55,9 +55,9 @@ The search form for dataset search
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
       {% set selected = c.fields_grouped['OP_systems']|first %}
-      <h4>{{ title }}</h4>
+      <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
-	<select style="height:8em;overflow:auto;" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	  {% for option in taglist_variables %}
             <option value="{{ option.value }}"{% if option.value in select %}
 		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
@@ -106,21 +106,19 @@ The search form for dataset search
   {%- endif %}    
   {% endblock %}  
   
-    <div class="clear-form-button">
-      <a class="btn" href={{ clear_url }}>
-	<i class="icon-large icon-remove-circle"></i>Clear Filter</a>
-    </div>
+<div class="row">
 
 
   {% block search_sortby %}
   {% if sorting %}
-    <div class="form-select control-group control-order-by">
+      <div class="form-select control-group control-order-by pull-left">
       <label for="field-order-by">{{ _('Order by') }}</label>
       <select id="field-order-by" name="sort">
         {% for label, value in sorting %}
-        {% if label and value %}
-        <option value="{{ value }}"{% if sorting_selected == value %}
-		selected="selected"{% endif %}>{{ label }}</option>
+            {%- if label and value %}
+              <option value="{{ value }}" {%- if sorting_selected == value %}
+		      selected="selected"{%- endif %}>{{ label }}
+	      </option>
         {% endif %}
         {% endfor %}
       </select>
@@ -130,9 +128,18 @@ The search form for dataset search
       {% endblock %}
       </div>
     {% endif %}
+    <div class="btn-group pull-right" role="group">
+      <button class="btn js-hide hidden_submit_btn" type="submit"><i class="icon-search"></i>{{ _('Filter') }}</button>
+      <a class="btn clear-form-button" href={{ clear_url }}>
+	<i class="icon-ban-circle"></i>{{ _('Clear') }}</a>
+    </div>
     {% endblock %}
+</div>
 
  
+<ul class="nav nav-list">
+  <li class="divider"></li>
+</ul>
 
 
   {% block search_title %}
