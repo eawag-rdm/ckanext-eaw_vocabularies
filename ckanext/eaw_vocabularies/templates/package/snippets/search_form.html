@@ -70,30 +70,18 @@ The search form for dataset search
 		 <span class="js-hide">find ANY</span>
 	</label>
       </div>
-	  
+   
 
-  {# {% set  select = c.fields_grouped['systems'] %}  #}
-  {# {\#{% set classes = ['form-horizontal'] %}#\}  #}
-  {# {% set taglist_systems=h.eaw_taglist("systems") %}  #}
-  {# {{ form.select('systems', id='field-systems', classes=classes,  #}
-  {# attrs={"multiple": "multiple", "data-module": "autocomplete"},  #}
-  {# label=_('Systems'), options=taglist_systems, selected=select) }}  #}
-  
-
-  {#
-  {% block search_input %}
-    <div class="search-input control-group {{ search_class }}">
-      <input type="text" class="search" name="q" value="{{ query }}"
-	     autocomplete="off" placeholder="{{ placeholder }}">
-      {% block search_input_button %}
-	<button type="submit" value="search">
-          <i class="icon-search"></i>
-          <span>{{ _('Submit') }}</span>
-	</button>
-      {% endblock %}
-    </div>
-  {% endblock %}
-  #}
+    {# <div class="search-input control-group {{ search_class }}"> #}
+    {#   <input type="text" class="search" name="q" value="{{ query }}" #}
+    {# 	     autocomplete="off" placeholder="{{ placeholder }}"> #}
+    {#   {% block search_input_button %} #}
+    {# 	<button type="submit" value="search"> #}
+    {#       <i class="icon-search"></i> #}
+    {#       <span>{{ _('Search') }}</span> #}
+    {# 	</button> #}
+    {#   {% endblock %} #}
+    {# </div> #}
   
   {# {% set facet_fields = h.eaw_get_facetfields() %}  #}
   {# FACET NAMES: {{ facet_fields }}  #}
