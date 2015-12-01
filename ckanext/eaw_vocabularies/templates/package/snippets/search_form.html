@@ -6,6 +6,7 @@ The search form for dataset search
 {% resource 'bootstrap-switch/bootstrap-switch.js' %}
 {% resource 'bootstrap-switch/bootstrap-switch.css' %}
 {% resource 'eaw_theme/andorswitch.js' %}
+{% resource 'eaw_theme/eaw_theme_hidewithjs.js' %}
 
 <h3>{{ _('Filter Datasets') }}</h3>
 {% if form_id is not defined %}
@@ -16,6 +17,8 @@ The search form for dataset search
       method="get" data-module="select-switch"
       data-module-target="select">  
       {%- set clear_url =  h.url_for(controller='package', action='search') %}
+
+      {# Variables #}
       {%- set taglist_variables=h.eaw_taglist("variables") %}
       {%- set select = c.fields_grouped['variables'] %}
       {%- set id = "field-variables"%}
@@ -39,10 +42,12 @@ The search form for dataset search
 	<input type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
 	       id="and-or" name="OP_variables" data-module="andorswitch"
 	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-	       <label class="checkbox">
-		 <span class="js-hide">find ANY</span>
-	       </label>
+	<label class="checkbox">
+	  <span class="js-hide">find ANY</span>
+	</label>
       </div>
+
+      {# Systems #}
       {%- set taglist_variables=h.eaw_taglist("systems") %}
       {%- set select = c.fields_grouped['systems'] %}
       {%- set id = "field-systems"%}
@@ -62,34 +67,67 @@ The search form for dataset search
 		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
 		  {% endfor %}
 	</select>
-	<label class="checkbox">
+	
 	  <input type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
 		 id="and-or" name="OP_systems" data-module="andorswitch"
 		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-		 <span class="js-hide">find ANY</span>
-	</label>
+	  <label class="checkbox">
+	    <span class="js-hide">find ANY</span>
+	  </label>
       </div>
-<p></p>
+
+      {# Time range #}
+      {%- set title = _('Time(-Range)') %}
+      <div style="float:left;margin-right:5px;">
+	<h4 class="h4searchlabel">Time-Start</h4>
+	<div class="search-input">
+	  <input style="width:24ex;" type="text" id="time-start" name="timestart" />
+	  <button type="submit" value="search">   
+	    <i class="icon-search"></i>   
+	    <span>{{ _('Search') }}</span>   
+    	  </button>
+	</div>
+      </div>
+      <div style="float:left;margin-right:5px;">
+	<h4 class="h4searchlabel">Time-End</h4>
+	<div class="search-input">
+	  <input style="width:24ex" type="text" id="time-end" name="timeend" />
+	  <button type="submit" value="search"> 
+	    <i class="icon-search"></i>   
+	    <span>{{ _('Search') }}</span>   
+	  </button>
+	</div>
+      </div>
+      
+      
+<p style="clear:both;"></p>
 {# <ul class="nav nav-list">  #}
 {#   <li class="divider"></li>  #}
 {# </ul>  #}
 
 
-<button class="btn btn-mini" type="button" style="width:320px;margin:0px;" onClick="$( '.togglesearch' ).toggle();">
-  <i class="icon-chevron-down pull-left"> Advanced Search</i></button> 
-<div class="togglesearch search-geant search-input control-group" style="display:none;">
+{# <button data-module="eaw_theme_hidewithjs" class="btn btn-default advsearchbutton" type="button"> #}
+{#   Advanced Search </i><b class="caret"></b> #}
+{# </button>  #}
+<ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs">
+  <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>
+</ul>
+<div class="togglesearch search-geant search-input control-group">
   <div class= "presearchboxtext">
-  You can use the <a target="_blank"
-  href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">Solr query syntax </a> here.
+    <h4> Advanced Search</h4>
+    You can use the <a target="_blank"
+    href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">Solr query syntax </a> here.
     For starters, just type any term to search for it across all fields in all packages.
   </div>
+  <div class="search-input">
     <input type="text" class="search" name="q" value="{{ query }}"   
     	   autocomplete="off" placeholder="type query ...">   
 	   <button type="submit" value="search">   
 	     <i class="icon-search"></i>   
 	     <span>{{ _('Search') }}</span>   
     	   </button>   
-  </div>  
+  </div>
+</div>
   
   {% block search_search_fields %}  
   {% if facet_fields -%}    

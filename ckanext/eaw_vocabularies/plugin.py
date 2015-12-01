@@ -59,6 +59,8 @@ def mk_field_queries(search_params, vocabfields):
     # build pre-query-strings
     fq_dict = {}
     for f in fq_list:
+        print("fq_dict: {}".format(fq_dict))
+        print("f: {}".format(f))
         try:
             fq_dict[f[0]] += ' '+_operator(f[0], operator_fields)+' '+f[1]
         except KeyError:
