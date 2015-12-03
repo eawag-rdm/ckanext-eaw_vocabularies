@@ -82,22 +82,19 @@ The search form for dataset search
 	<h4 class="h4searchlabel">Time-Start</h4>
 	<div class="search-input">
 	  <input style="width:24ex;" type="text" id="time-start" name="timestart" />
-	  <button type="submit" value="search">   
-	    <i class="icon-search"></i>   
-	    <span>{{ _('Search') }}</span>   
-    	  </button>
 	</div>
       </div>
       <div style="float:left;margin-right:5px;">
 	<h4 class="h4searchlabel">Time-End</h4>
 	<div class="search-input">
 	  <input style="width:24ex" type="text" id="time-end" name="timeend" />
-	  <button type="submit" value="search"> 
+	  <button type="submit" value="search" class="outsidebutton"> 
 	    <i class="icon-search"></i>   
 	    <span>{{ _('Search') }}</span>   
 	  </button>
 	</div>
       </div>
+
       
       
 <p style="clear:both;"></p>
@@ -122,10 +119,10 @@ The search form for dataset search
   <div class="search-input">
     <input type="text" class="search" name="q" value="{{ query }}"   
     	   autocomplete="off" placeholder="type query ...">   
-	   <button type="submit" value="search">   
-	     <i class="icon-search"></i>   
-	     <span>{{ _('Search') }}</span>   
-    	   </button>   
+    <button type="submit" value="search" tabindex=0>   
+      <i class="icon-search"></i>   
+      <span>{{ _('Search') }}</span>   
+    </button>   
   </div>
 </div>
   
@@ -152,7 +149,8 @@ The search form for dataset search
     <div class="btn-group pull-right" role="group">
       <button class="btn js-hide hidden_submit_btn" type="submit"><i class="icon-search"></i>{{ _('Filter') }}</button>
       <a class="btn clear-form-button" href={{ clear_url }}>
-	<i class="icon-ban-circle"></i>{{ _('Clear') }}</a>
+	<i class="icon-ban-circle"></i>{{ _('Clear') }}
+      </a>
     </div>
   </div>
 
