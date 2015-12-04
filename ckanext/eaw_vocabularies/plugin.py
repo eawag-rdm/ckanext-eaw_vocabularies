@@ -51,21 +51,40 @@ def mk_field_queries(search_params, vocabfields):
 
     def _prefix(fn):
         return("vocab_"+fn if fn in vocabfields else fn)
+
+    def _assemble_timerange(fqd):
+        ''' 
+        Produce a DaterangeField compatible search string
+        from timestart and timeend
+        '''
+        try:
+            fqd["timerange"] = fqd["timestart"].strip('"')
+            del fqd["timestart"]
+        except KeyError:
+            return(fqd)
+        try:
+            fqd["timerange"] += " TO " + fqd["timeend"].strip('"')
+            del fqd["timeend"]
+        except KeyError:
+            return(fqd)
+        fqd["timerange"] = "[" + fqd["timerange"] + "]"
+        return(fqd)
         
-    fq_list = [e.split(':') for e in search_params['fq'].split()]
+    fq_list = [e.split(':', 1) for e in search_params['fq'].split()]
+    print("fq_list: {}".format(fq_list))
     operator_fields = dict([x for x in fq_list if x[0].startswith('OP_')])
     # remove OP_* fields from query
     fq_list = [f for f in fq_list if f[0] not in operator_fields.keys()]
     # build pre-query-strings
     fq_dict = {}
     for f in fq_list:
-        print("fq_dict: {}".format(fq_dict))
-        print("f: {}".format(f))
         try:
             fq_dict[f[0]] += ' '+_operator(f[0], operator_fields)+' '+f[1]
         except KeyError:
             fq_dict[f[0]] = f[1]
-    print(fq_dict)
+    print("fq_dict: {}".format(fq_dict))
+    fq_dict = _assemble_timerange(fq_dict)
+    print("fq_dict after _assemble_timerange: {}".format(fq_dict))
     # assemble query-string
     query = ''
     for f in fq_dict.items():

@@ -77,17 +77,20 @@ The search form for dataset search
       </div>
 
       {# Time range #}
+      {% set timestartval = c.fields_grouped['timestart'] |first %}
+      {% set timeendval = c.fields_grouped['timeend'] |first %} 
       {%- set title = _('Time(-Range)') %}
+
       <div style="float:left;margin-right:5px;">
 	<h4 class="h4searchlabel">Time-Start</h4>
 	<div class="search-input">
-	  <input style="width:24ex;" type="text" id="time-start" name="timestart" />
+	  <input style="width:24ex;" type="text" id="time-start" name="timestart" value="{{ timestartval }}"/>
 	</div>
       </div>
       <div style="float:left;margin-right:5px;">
 	<h4 class="h4searchlabel">Time-End</h4>
 	<div class="search-input">
-	  <input style="width:24ex" type="text" id="time-end" name="timeend" />
+	  <input style="width:24ex" type="text" id="time-end" name="timeend" value="{{ timeendval }}"/>
 	  <button type="submit" value="search" class="outsidebutton"> 
 	    <i class="icon-search"></i>   
 	    <span>{{ _('Search') }}</span>   
@@ -95,8 +98,7 @@ The search form for dataset search
 	</div>
       </div>
 
-      
-      
+
 <p style="clear:both;"></p>
 {# <ul class="nav nav-list">  #}
 {#   <li class="divider"></li>  #}
