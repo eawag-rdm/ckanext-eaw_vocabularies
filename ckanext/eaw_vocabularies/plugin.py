@@ -1,5 +1,6 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
+from ckanext.eaw_vocabularies.dateval import SolrDaterange
 
 import datetime as dt
 
@@ -58,12 +59,12 @@ def mk_field_queries(search_params, vocabfields):
         from timestart and timeend
         '''
         try:
-            fqd["timerange"] = fqd["timestart"].strip('"')
+            fqd["timerange"] = fqd["timestart"]
             del fqd["timestart"]
         except KeyError:
             return(fqd)
         try:
-            fqd["timerange"] += " TO " + fqd["timeend"].strip('"')
+            fqd["timerange"] += " TO " + fqd["timeend"]
             del fqd["timeend"]
         except KeyError:
             return(fqd)
