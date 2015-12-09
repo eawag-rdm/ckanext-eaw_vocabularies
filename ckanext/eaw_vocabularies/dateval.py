@@ -2,14 +2,22 @@ from ckan.plugins.toolkit import Invalid
 import re
 
 class SolrDaterange(object):
-    '''Evaluates wheter a date-time string conforms to
-    the DateRangeField specification of SOLR 5.4.
+    '''
+    Evaluates wheter a date-time string conforms to
+    a user-friendly version of DateRangeField specification of SOLR 5.4.
     https://cwiki.apache.org/confluence/display/solr/Working+with+Dates
+
+    "User-friendly" means that
+    1) the brackets surrounding explicit ranges are
+       not required and added if absent.
+    2) The "Z" which has to be the last character in a non-implicit
+       DateRange string (i.e., one containing seconds) is not required
+       and added if absent.
     '''
     
     dateregex = '^(?P<year>-?\d{4,})(-(?P<month>\d{2})(-(?P<day>\d{2}))?)?$|^(?P<wildcard>\*)$'
     timeregex = '^(?P<hours>\d{2})(:(?P<mins>\d{2})(:(?P<secs>\d{2}(\.\d+)?Z?))?)?$'
-    expli_dateregex = '^(?P<start>.*) TO (?P<end>.*)$'
+    expli_dateregex = '^\[*(?P<start>.*?) TO (?P<end>.*?)\]?$'
 
     @classmethod
     def _split_explicit_range(cls, datestr):
@@ -23,13 +31,13 @@ class SolrDaterange(object):
 
     @classmethod
     def _split_dt(cls, datestr):
+        ''' Splits an (implicit) DateRange - string
+        into the date- and the time-part.'''
         try:
-            dat, tim = datestr.split('T')
-            if tim == '':
-                raise Invalid("{} is not a valid date".format(datestr))
+            dat, tim = datestr.split('T', 1)
         except ValueError:
-            dat = datestr.split('T')[0]
-            tim = ''
+            dat = datestr
+            tim = None
         return((dat, tim))
 
     @classmethod
@@ -91,6 +99,7 @@ class SolrDaterange(object):
         else:
             if secs[-1] != "Z":
                 intsecs = float(secs)
+                v_time += ":" + secs + "Z"
             else:
                 intsecs = float(secs[0:-1])
                 v_time += ":" + secs
@@ -112,7 +121,7 @@ class SolrDaterange(object):
         for timestamp in dates:
             dat, tim = cls._split_dt(timestamp)
             valid.append(cls._val_month_day(cls._val_date(dat)))
-            if tim:
+            if tim is not None:
                 v_time = cls._valhour_min_sec(cls._valtime(tim))
                 valid[-1] += 'T' + v_time
         if len(valid) == 2:
@@ -121,6 +130,6 @@ class SolrDaterange(object):
             valid = valid[0]
         else:
             raise Invalid("Something went horribly wrong.")
+        print("{} -> {}".format(datestr, valid))
         return(valid)
-            
 
