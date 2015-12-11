@@ -1,8 +1,10 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
-from ckanext.eaw_vocabularies.validate_solr_daterange import SolrDaterange
+import ckanext.eaw_vocabularies.validate_solr_daterange as dr
+
 
 import datetime as dt
+import re
 
 ## Needs to be put in config eventually. List of fields of
 ## custom searches and logical operator to apply among terms with
@@ -53,23 +55,31 @@ def mk_field_queries(search_params, vocabfields):
     def _prefix(fn):
         return("vocab_"+fn if fn in vocabfields else fn)
 
+    def _fix_timestamp(tstamp):
+        return(tstamp + "Z" if len(tstamp.split(":")) == 3 else tstamp)
+
     def _assemble_timerange(fqd):
         ''' 
         Produce a DaterangeField compatible search string
         from timestart and timeend
         '''
         try:
+            fqd["timestart"] = _fix_timestamp(fqd["timestart"].strip('"'))
+        except KeyError:
+            return(fqd)
+        else:
             fqd["timerange"] = fqd["timestart"]
-            del fqd["timestart"]
-        except KeyError:
-            return(fqd)
+            del fqd["timestart"] 
         try:
-            fqd["timerange"] += " TO " + fqd["timeend"]
-            del fqd["timeend"]
+            fqd["timeend"] = _fix_timestamp(fqd["timeend"].strip('"'))
         except KeyError:
+            fqd["timerange"] = '"' + fqd["timerange"] + '"'
             return(fqd)
-        fqd["timerange"] = "[" + fqd["timerange"] + "]"
-        return(fqd)
+        else:
+            fqd["timerange"] += " TO " + fqd["timeend"]
+            fqd["timerange"] = "[" + fqd["timerange"] + "]"
+            del fqd["timeend"]
+            return(fqd)
         
     fq_list = [e.split(':', 1) for e in search_params['fq'].split()]
     print("fq_list: {}".format(fq_list))
@@ -85,6 +95,12 @@ def mk_field_queries(search_params, vocabfields):
             fq_dict[f[0]] = f[1]
     print("fq_dict: {}".format(fq_dict))
     fq_dict = _assemble_timerange(fq_dict)
+    try:
+        dr.SolrDaterange.validate(fq_dict["timerange"])
+    except dr.Invalid:
+        print("BUT THIS IS NO DATERANGE !!")
+    except KeyError:
+        pass
     print("fq_dict after _assemble_timerange: {}".format(fq_dict))
     # assemble query-string
     query = ''
