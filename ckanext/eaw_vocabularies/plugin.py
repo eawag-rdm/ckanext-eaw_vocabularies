@@ -1,6 +1,6 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
-from ckanext.eaw_vocabularies.dateval import SolrDaterange
+from ckanext.eaw_vocabularies.validate_solr_daterange import SolrDaterange
 
 import datetime as dt
 
