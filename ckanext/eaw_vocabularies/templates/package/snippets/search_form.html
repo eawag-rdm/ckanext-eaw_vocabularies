@@ -12,6 +12,9 @@ The search form for dataset search
 {% if form_id is not defined %}
   {% set form_id="dataset-search-form" %}
 {% endif %}
+
+{% block errors %}{{ form.errors(search_error) }}{% endblock %}
+
 <form id="{{ form_id }}"
       class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %} search-form"
       method="get" data-module="select-switch"
@@ -77,8 +80,8 @@ The search form for dataset search
       </div>
 
       {# Time range #}
-      {% set timestartval = c.fields_grouped['timestart'] |first %}
-      {% set timeendval = c.fields_grouped['timeend'] |first %} 
+      {% set timestartval = c.fields_grouped['timestart'] %}
+      {% set timeendval = c.fields_grouped['timeend'] %} 
       {%- set title = _('Time(-Range)') %}
 
       <div style="float:left;margin-right:5px;">

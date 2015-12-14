@@ -1,7 +1,7 @@
+from pylons import c
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 import ckanext.eaw_vocabularies.validate_solr_daterange as dr
-
 
 import datetime as dt
 import re
@@ -58,29 +58,53 @@ def mk_field_queries(search_params, vocabfields):
     def _fix_timestamp(tstamp):
         return(tstamp + "Z" if len(tstamp.split(":")) == 3 else tstamp)
 
+    def _fix_timefields(d):
+        c.fields_grouped.pop('timestart', None)
+        c.fields_grouped.pop('timeend', None)
+        c.fields_grouped.update(d)
+        c.fields = [x for x in c.fields if x[0] not in ['timestart', 'timeend']]
+
+    def _vali_daterange(trange):
+        try:
+            trange = dr.SolrDaterange.validate(trange)
+        except dr.Invalid as e:
+            c.search_errors = {'timerange': str(e)}
+        return(trange)
+
     def _assemble_timerange(fqd):
         ''' 
         Produce a DaterangeField compatible search string
-        from timestart and timeend
+        from timestart and timeend.
         '''
         try:
             fqd["timestart"] = _fix_timestamp(fqd["timestart"].strip('"'))
         except KeyError:
-            return(fqd)
+            try:
+                fqd["timeend"] = _fix_timestamp(fqd["timeend"].strip('"'))
+            except KeyError:
+                return(fqd)
+            else:
+
+                fqd["timerange"] = "[* TO " + fqd["timeend"] + "]"
+                fqd["timerange"] = _vali_daterange(fqd["timerange"])
+                _fix_timefields({'timestart': "*", 'timeend': fqd["timeend"]}) 
+                return(fqd)
         else:
-            fqd["timerange"] = fqd["timestart"]
-            del fqd["timestart"] 
-        try:
-            fqd["timeend"] = _fix_timestamp(fqd["timeend"].strip('"'))
-        except KeyError:
-            fqd["timerange"] = '"' + fqd["timerange"] + '"'
-            return(fqd)
-        else:
-            fqd["timerange"] += " TO " + fqd["timeend"]
-            fqd["timerange"] = "[" + fqd["timerange"] + "]"
-            del fqd["timeend"]
-            return(fqd)
-        
+            try:
+                fqd["timeend"] = _fix_timestamp(fqd["timeend"].strip('"'))
+            except KeyError:
+                fqd["timerange"] = fqd["timestart"]
+                fqd["timerange"] = _vali_daterange(fqd["timerange"])
+                _fix_timefields({'timestart': fqd["timestart"]}) 
+                return(fqd)
+            else:
+                fqd["timerange"] = ("[" + fqd["timestart"] + " TO "
+                                    + fqd["timeend"] + "]")
+                fqd["timerange"] = _vali_daterange(fqd["timerange"])
+                _fix_timefields({'timestart': fqd["timestart"],
+                                 'timeend': fqd["timeend"]})
+                return(fqd)
+    
     fq_list = [e.split(':', 1) for e in search_params['fq'].split()]
     print("fq_list: {}".format(fq_list))
     operator_fields = dict([x for x in fq_list if x[0].startswith('OP_')])
@@ -95,21 +119,15 @@ def mk_field_queries(search_params, vocabfields):
             fq_dict[f[0]] = f[1]
     print("fq_dict: {}".format(fq_dict))
     fq_dict = _assemble_timerange(fq_dict)
-    try:
-        dr.SolrDaterange.validate(fq_dict["timerange"])
-    except dr.Invalid:
-        print("BUT THIS IS NO DATERANGE !!")
-    except KeyError:
-        pass
+    fq_dict.pop("timestart", None)
+    fq_dict.pop('timeend', None)
     print("fq_dict after _assemble_timerange: {}".format(fq_dict))
     # assemble query-string
     query = ''
     for f in fq_dict.items():
         query += ' '+_prefix(f[0])+':('+f[1]+')'
     search_params['fq'] = query
-    return(search_params)
-    
-    
+    return(search_params)    
             
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.IConfigurer)
