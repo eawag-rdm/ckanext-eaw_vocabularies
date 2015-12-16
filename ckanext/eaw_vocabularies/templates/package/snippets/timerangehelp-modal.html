@@ -1,0 +1,38 @@
+{# The content of a modal to give help on the syntax for the timerange - field.
+   Should be used from a button like so:  
+   <button  type="button" class="outsidebutton second"
+	    data-module="eaw_vocabularies_daterange_info"  
+ 	    data-module-target="#timerangehelp">  
+ 	    <i class="icon-info-sign"></i>  
+   </button> 
+#}
+	  
+<div id="timerangehelp" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Examples</h3>
+  </div>
+  <div class="modal-body">
+    <span>Use only <span style="background:yellow;">Time-Start</span> for year, month, day, hour, minute, second:</span>
+    <p>
+      <table>
+	<tr><th class="col1">Time-Start</th><th class="col2">Time-End</th><th class="col3"></th></tr>
+	<tr><td>2015</td><td></td><td>any time during 2015</td></tr>
+	<tr><td>2015-03</td><td></td><td>any time during March 2015</td></tr>
+	<tr><td>2015-03-11</td><td></td><td>any time during March 11, 2015</td></tr>
+	<tr><td>2015-03-11T23</td><td></td><td>March 3, 2015, [23:00 .. 24:00)</td></tr>
+	<tr><td>1969-10-29T22:30:04.765</td><td></td><td>a particular microsecond</td></tr>
+      </table>
+    </p><p>
+      <span>Use <span style="background:yellow;">Time-Start</span> and <span style="background:yellow;">Time-End</span> for explicit time-ranges:</span>
+      <table>
+	<tr><th class="col1">Time-Start</th><th class="col2">Time-End</th><th class="col3"></th></tr>
+	<tr><td>2014</td><td>2016</td><td>any time in 2014, 2015 or 2016</td></tr>
+	<tr><td>1969-06</td><td>1969-08</td><td>any time during summer 1969</td></tr>
+	<tr><td>1969-07-16T13:32:00</td><td>1969-07-24T16:50:35</td><td>during the flight of Apollo 11</td></tr>
+	<tr><td>-9700</td><td>*</td><td>during the Holocene</td></tr>
+	<tr><td>*</td><td>-0001</td><td>Before Common Era</td></tr>
+      </table>
+    </p>			   
+  </div>
+</div> 
