@@ -109,36 +109,56 @@ The search form for dataset search
 
       {% snippet 'package/snippets/timerangehelp-modal.html' %}
       
-<p style="clear:both;"></p>
+      <p style="clear:both;"></p>
+      
+      <div style="width:100%px;background:red;position:relative;">
+	<div style="position:absolute;right:0px;">
+	     {# <div class="btn-group" role="group"> #}
+	  {# <a class="btn clear-form-button" href={{ clear_url }}> #}
+	  <a class="btn" href={{ clear_url }}>
+		 <i class="icon-ban-circle"></i>
+		 {{ _('Clear') }}
+	       </a>
+	       <button class="btn js-hide hidden_submit_btn" type="submit">
+		 <i class="icon-search"></i>
+		 {{ _('Filter') }}
+	       </button>
+	     {# </div> #}
+	</div>
+      </div>
+      
+      <ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs"
+	  data-module-target="#advancedsearch">
+	  <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>
+      </ul>
+      <p>
+	<div id="advancedsearch" class="togglesearch search-geant search-input control-group">
+	  <div class="presearchboxtext">
+	    <h4> Advanced Search</h4>
+	    You can use the <a target="_blank"
+	    href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">
+	    Solr query syntax</a> here. For starters, just type any term to
+	    search for it across all fields in all packages.
+	    <div class="search-input">
+	      <input type="text" class="search" name="q" value="{{ query }}"   
+    		     autocomplete="off" placeholder="type query ...">   
+		     <button type="submit" value="search" tabindex=0>   
+		       <i class="icon-search"></i>   
+		       <span>{{ _('Search') }}</span>   
+		     </button>   
+	    </div>
+	  </div>
+	</div>
+      </p>
 
-<ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs">
-  <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>
-</ul>
-<div class="togglesearch search-geant search-input control-group">
-  <div class= "presearchboxtext">
-    <h4> Advanced Search</h4>
-    You can use the <a target="_blank"
-    href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser">Solr query syntax </a> here.
-    For starters, just type any term to search for it across all fields in all packages.
-  </div>
-  <div class="search-input">
-    <input type="text" class="search" name="q" value="{{ query }}"   
-    	   autocomplete="off" placeholder="type query ...">   
-    <button type="submit" value="search" tabindex=0>   
-      <i class="icon-search"></i>   
-      <span>{{ _('Search') }}</span>   
-    </button>   
-  </div>
-</div>
-  
   {% block search_search_fields %}  
   {% if facet_fields -%}    
     <span>{{ form.hidden_from_list(fields=facet_fields) }}</span>    
   {%- endif %}    
   {% endblock %}  
   
-  
-  <div class="form-select control-group control-order-by">
+ 
+  <div class="form-select control-group control-order-by ">
     {% if sorting %}
     <label for="field-order-by">{{ _('Order by') }}</label>
     <select id="field-order-by" name="sort">
@@ -151,12 +171,6 @@ The search form for dataset search
         {% endfor %}
     </select>
     {% endif %}
-    <div class="btn-group pull-right" role="group">
-      <button class="btn js-hide hidden_submit_btn" type="submit"><i class="icon-search"></i>{{ _('Filter') }}</button>
-      <a class="btn clear-form-button" href={{ clear_url }}>
-	<i class="icon-ban-circle"></i>{{ _('Clear') }}
-      </a>
-    </div>
   </div>
 
   {% block search_title %}
