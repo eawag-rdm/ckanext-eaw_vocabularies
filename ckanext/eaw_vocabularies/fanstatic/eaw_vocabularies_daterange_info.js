@@ -9,9 +9,10 @@
 ckan.module('eaw_vocabularies_daterange_info', function ($, _) {
     return {
 	initialize: function () {
-	    var options = this.options;
-	    console.log(options);
-	    this.el.modal(options);
+	    var target = this.options.target;
+	    var modal = this.sandbox.jQuery( target );
+	    modal.modal({show: false});
+	    this.el.click(function (){modal.modal('toggle')});
 	}
     };
 });
