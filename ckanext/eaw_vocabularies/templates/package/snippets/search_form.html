@@ -159,9 +159,6 @@ The search form for dataset search
     </div>
   </div>
 
- 
-
-
   {% block search_title %}
     {% if not no_title %}
       <h2>{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
@@ -170,7 +167,6 @@ The search form for dataset search
 
   {% block search_facets %}
     {% set facet_names = h.eaw_get_facetnames() %}
-    {{ facet_names }}
     {% if facet_names %}
       <p class="filter-list">
         {% for field in facet_names %}
@@ -193,7 +189,6 @@ The search form for dataset search
       <a class="show-filters btn">{{ _('Filter Results') }}</a>
     {% endif %}
   {% endblock %}
-
 </form>
 
 {% if show_empty and count == 0 %}
