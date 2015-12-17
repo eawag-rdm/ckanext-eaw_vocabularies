@@ -9,7 +9,6 @@ The search form for dataset search
 {% resource 'eaw_theme/eaw_theme_hidewithjs.js' %}
 {% resource 'eaw_vocabularies/eaw_vocabularies_daterange_info.js' %}
 
-<h1>{{ query }}</h1>
 
 <h3>{{ _('Filter Datasets') }}</h3>
 {% if form_id is not defined %}
@@ -113,10 +112,6 @@ The search form for dataset search
       
       <p style="clear:both;"></p>
       
-      {# <div style="width:100%px;background:red;position:relative;"> #}
-      {# <div style="position:absolute;right:0px;"> #} 
-	     {# <div class="btn-group" role="group"> #}
-      {# <a class="btn clear-form-button" href={{ clear_url }}> #}
       <div class="btn-group clear-filter-group">
         <a class="btn" type="button" href="{{ clear_url }}">
 	  <i class="icon-ban-circle"></i>
@@ -157,7 +152,8 @@ The search form for dataset search
   {%- endif %}    
   {% endblock %}  
   
- 
+  <hr />
+  
   <div class="form-select control-group control-order-by ">
     {% if sorting %}
     <label for="field-order-by">{{ _('Order by') }}</label>
@@ -179,30 +175,32 @@ The search form for dataset search
     {% endif %}
   {% endblock %}
 
-  {% block search_facets %}
-    {% set facet_names = h.eaw_get_facetnames() %}
-    {% if facet_names %}
-      <p class="filter-list">
-        {% for field in facet_names %}
-          {% set search_facets_items = facets.search.get(field)['items'] %}
-          <span class="facet">{{ facets.titles.get(field) }}:</span>
-          {% for value in facets.fields[field] %}
-            <span class="filtered pill">
-              {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
-                {{ facets.translated_fields[(field,value)] }}
-              {%- else -%}
-                {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-              {%- endif %}
-              <a href="{{ facets.remove_field(field, value) }}"
-		 class="remove" title="{{ _('Remove') }}">
-		 <i class="icon-remove"></i></a>
-            </span>
-          {% endfor %}
-        {% endfor %}
-      </p>     
-      <a class="show-filters btn">{{ _('Filter Results') }}</a>
-    {% endif %}
-  {% endblock %}
+  <hr />
+  
+  {# {% block search_facets %} #}
+  {#   {% set facet_names = h.eaw_get_facetnames() %} #}
+  {#   {% if facet_names %} #}
+  {#     <p class="filter-list"> #}
+  {#       {% for field in facet_names %} #}
+  {#         {% set search_facets_items = facets.search.get(field)['items'] %} #}
+  {#         <span class="facet">{{ facets.titles.get(field) }}:</span> #}
+  {#         {% for value in facets.fields[field] %} #}
+  {#           <span class="filtered pill"> #}
+  {#             {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%} #}
+  {#               {{ facets.translated_fields[(field,value)] }} #}
+  {#             {%- else -%} #}
+  {#               {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }} #}
+  {#             {%- endif %} #}
+  {#             <a href="{{ facets.remove_field(field, value) }}" #}
+  {# 		 class="remove" title="{{ _('Remove') }}"> #}
+  {# 		 <i class="icon-remove"></i></a> #}
+  {#           </span> #}
+  {#         {% endfor %} #}
+  {#       {% endfor %} #}
+  {#     </p>      #}
+  {#     <a class="show-filters btn">{{ _('Filter Results') }}</a> #}
+  {#   {% endif %} #}
+  {# {% endblock %} #}
 </form>
 
 {% if show_empty and count == 0 %}
