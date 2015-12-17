@@ -1,0 +1,22 @@
+{# Modified version for Eawag #}
+
+{% ckan_extends %}
+
+{% block package_item %}
+  <div class="well well-small">
+    {{ super() }}
+  </div>
+{% endblock%}
+  
+{% block heading_title %}
+  {% set orgatitle = package.organization.title %}
+  {% set organame = package.organization.name %}
+  {% set orgalink = h.url_for(controller='organization', action='read', id=organame) %}
+  {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+  <span class="badge badge-inverse">
+    {{ h.link_to(orgatitle, h.url_for(controller='organization', action='read', id=package.organization.name)) }}
+  </span>
+{% endblock %}
+
+ 
+
