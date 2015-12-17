@@ -9,6 +9,8 @@ The search form for dataset search
 {% resource 'eaw_theme/eaw_theme_hidewithjs.js' %}
 {% resource 'eaw_vocabularies/eaw_vocabularies_daterange_info.js' %}
 
+<h1>{{ query }}</h1>
+
 <h3>{{ _('Filter Datasets') }}</h3>
 {% if form_id is not defined %}
   {% set form_id="dataset-search-form" %}
@@ -128,7 +130,7 @@ The search form for dataset search
       
       <div> 
       	<ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs"  
-      	    data-module-target="#advancedsearch">  
+      	    data-module-target="#advancedsearch" data-module-query={{ query }}>  
       	    <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>  
       	</ul>  
 	<div id="advancedsearch" class="togglesearch search-geant">
