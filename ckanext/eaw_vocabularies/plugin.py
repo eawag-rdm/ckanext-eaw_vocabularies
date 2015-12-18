@@ -105,7 +105,7 @@ def mk_field_queries(search_params, vocabfields):
                                  'timeend': fqd["timeend"]})
                 return(fqd)
     
-    fq_list = [e.split(':', 1) for e in search_params['fq'].split()]
+    fq_list = [e.split(':', 1) for e in search_params.get('fq', '').split()]
     operator_fields = dict([x for x in fq_list if x[0].startswith('OP_')])
     # remove OP_* fields from query
     fq_list = [f for f in fq_list if f[0] not in operator_fields.keys()]
