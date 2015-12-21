@@ -109,8 +109,10 @@ def mk_field_queries(search_params, vocabfields):
                 return(fqd)
             
     def _collect_fqfields(queryfield):
-        print("querystring: {}".format(search_params.get(queryfield, '')))
-        querylist = [e.split(':', 1) for e in search_params.get(queryfield, '').split()]
+        querystring = search_params.get(queryfield, '');
+        querystring = re.sub(": +", ":", querystring)
+        print("querystring: {}".format(querystring))
+        querylist = [e.split(':', 1) for e in querystring.split()]
         print("querylist for {}: {}".format(queryfield, querylist))
         # extract operator_fields
         operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
