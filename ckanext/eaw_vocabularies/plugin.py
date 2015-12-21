@@ -109,7 +109,9 @@ def mk_field_queries(search_params, vocabfields):
                 return(fqd)
             
     def _collect_fqfields(queryfield):
+        print("querystring: {}".format(search_params.get(queryfield, '')))
         querylist = [e.split(':', 1) for e in search_params.get(queryfield, '').split()]
+        print("querylist for {}: {}".format(queryfield, querylist))
         # extract operator_fields
         operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
         # extract eaw_fqfields
@@ -140,11 +142,18 @@ def mk_field_queries(search_params, vocabfields):
     fq_dict = _assemble_timerange(fq_dict)
     fq_dict.pop("timestart", None)
     fq_dict.pop('timeend', None)
-    # assemble query-string
-    query = ''
+    # assemble fq-query-string
+    fq_query = ''
     for f in fq_dict.items():
-        query += ' '+_prefix(f[0])+':('+f[1]+')'
-    search_params['fq'] = query
+        fq_query += ' ' + _prefix(f[0]) + ':(' + f[1] + ')'
+    for f in fq_list_orig:
+        fq_query += ' ' + f[0] + ':(' + f[1] + ')'
+    # re-assemble q-query-string
+    q_query = ''
+    for f in q_list_orig:
+        q_query += ' ' + f[0]
+    search_params['fq'] = fq_query
+    search_params['q'] = q_query
     return(search_params)    
             
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
