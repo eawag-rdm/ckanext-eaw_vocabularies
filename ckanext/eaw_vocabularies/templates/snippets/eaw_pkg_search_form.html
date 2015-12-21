@@ -25,16 +25,16 @@ The search form for dataset search
 
       {# Variables #}
       {%- set taglist_variables=h.eaw_taglist("variables") %}
-      {%- set select = c.fields_grouped['variables'] %}
+      {%- set select = c.fields_grouped['eaw_fqfield_variables'] %}
       {%- set id = "field-variables"%}
-      {%- set name = "variables" %}
+      {%- set name = "eaw_fqfield_variables" %}
       {%- set title = _('Variables') %}
       {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
       |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
       tag3=taglist_variables[2].value) %}
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {% set selected = c.fields_grouped['OP_variables']|first %}
+      {% set selected = c.fields_grouped['OP_' ~ name]|first %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -45,7 +45,7 @@ The search form for dataset search
 	</select>
 	
 	<input type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
-	       id="and-or" name="OP_variables" data-module="andorswitch"
+	       id="and-or" name="OP_{{ name }}" data-module="andorswitch"
 	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
 	<label class="checkbox">
 	  <span class="js-hide">find ANY</span>
@@ -54,16 +54,16 @@ The search form for dataset search
 
       {# Systems #}
       {%- set taglist_variables=h.eaw_taglist("systems") %}
-      {%- set select = c.fields_grouped['systems'] %}
+      {%- set select = c.fields_grouped['eaw_fqfield_systems'] %}
       {%- set id = "field-systems"%}
-      {%- set name = "systems" %}
+      {%- set name = "eaw_fqfield_systems" %}
       {%- set title = _('Systems') %}
       {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
       |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
       tag3=taglist_variables[2].value) %}
       {%- set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {%- set selected = c.fields_grouped['OP_systems']|first %}
+      {%- set selected = c.fields_grouped['OP_' ~ name]|first %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -74,7 +74,7 @@ The search form for dataset search
 	</select>
 	
 	  <input type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
-		 id="and-or" name="OP_systems" data-module="andorswitch"
+		 id="and-or" name="OP_{{ name }}" data-module="andorswitch"
 		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
 	  <label class="checkbox">
 	    <span class="js-hide">find ANY</span>
@@ -89,13 +89,15 @@ The search form for dataset search
       <div style="float:left;margin-right:5px;">
 	<h4 class="h4searchlabel">Time-Start</h4>
 	<div class="search-input">
-	  <input style="width:24ex;" type="text" id="time-start" name="timestart" value="{{ timestartval }}"/>
+	  <input style="width:24ex;" type="text" id="time-start"
+		 name="eaw_fqfield_timestart" value="{{ timestartval }}"/>
 	</div>
       </div>
       <div style="float:left;margin-right:5px;">
 	<h4 class="h4searchlabel">Time-End</h4>
 	<div class="search-input">
-	  <input style="width:24ex" type="text" id="time-end" name="timeend" value="{{ timeendval }}"/>
+	  <input style="width:24ex" type="text" id="time-end"
+		 name="eaw_fqfield_timeend" value="{{ timeendval }}"/>
 	  <button type="submit" value="search" class="outsidebutton"> 
 	    <i class="icon-search"></i>   
 	    <span>{{ _('Search') }}</span>   

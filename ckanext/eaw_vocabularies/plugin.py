@@ -65,9 +65,11 @@ def mk_field_queries(search_params, vocabfields):
         c.fields = [x for x in c.fields if x[0] not in ['timestart', 'timeend']]
 
     def _vali_daterange(trange):
+        print("_valid_daterange trange: {}".format(trange))
         try:
             trange = dr.SolrDaterange.validate(trange)
         except dr.Invalid as e:
+            print("VALIDATION FAILED")
             c.search_errors = {'timerange': str(e)}
         return(trange)
 
@@ -76,6 +78,7 @@ def mk_field_queries(search_params, vocabfields):
         Produce a DaterangeField compatible search string
         from timestart and timeend.
         '''
+
         try:
             fqd["timestart"] = _fix_timestamp(fqd["timestart"].strip('"'))
         except KeyError:
@@ -104,14 +107,32 @@ def mk_field_queries(search_params, vocabfields):
                 _fix_timefields({'timestart': fqd["timestart"],
                                  'timeend': fqd["timeend"]})
                 return(fqd)
+            
+    def _collect_fqfields(queryfield):
+        querylist = [e.split(':', 1) for e in search_params.get(queryfield, '').split()]
+        # extract operator_fields
+        operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
+        # extract eaw_fqfields
+        fq_list_eaw = [x for x in querylist if x[0].startswith('eaw_fqfield_')]
+        # remove fqfields from query
+        querylist = [x for x in querylist if not x[0].startswith('eaw_fqfield_')]
+        # remove OP_* fields from query
+        querylist = [f for f in querylist if not 'eaw_fqfield_' in f[0]]
+        # remove the prefix / infix
+        fq_list_eaw = [[x[0].replace('eaw_fqfield_', ''), x[1]]
+                       for x in fq_list_eaw]
+        operator_fields = {x[0].replace('eaw_fqfield_', ''): x[1]
+                           for x in operator_fields.items()}
+        return((querylist, fq_list_eaw, operator_fields))
     
-    fq_list = [e.split(':', 1) for e in search_params.get('fq', '').split()]
-    operator_fields = dict([x for x in fq_list if x[0].startswith('OP_')])
-    # remove OP_* fields from query
-    fq_list = [f for f in fq_list if f[0] not in operator_fields.keys()]
+    fq_list_orig, fq_list_eaw, operator_fields = _collect_fqfields('fq')
+    q_list_orig, fq_list_eaw_q, operator_fields_q = _collect_fqfields('q')
+    fq_list_eaw.extend(fq_list_eaw_q)
+    operator_fields.update(operator_fields_q)
+
     # build pre-query-strings
     fq_dict = {}
-    for f in fq_list:
+    for f in fq_list_eaw:
         try:
             fq_dict[f[0]] += ' '+_operator(f[0], operator_fields)+' '+f[1]
         except KeyError:
@@ -195,11 +216,11 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
 
     # IPackageController
     def before_search(self, search_params):
-        # print("before_search - input: search_params")
-        # print(search_params)
+        print("before_search - input: search_params")
+        print(search_params)
         sp = mk_field_queries(search_params, self._vocab_fields)
-        # print("before_search - output: search_params")
-        # print(sp)
+        print("before_search - output: search_params")
+        print(sp)
         # print("before_search - facetfields:")
         # print(eaw_get_facetfields())
         return(sp)
