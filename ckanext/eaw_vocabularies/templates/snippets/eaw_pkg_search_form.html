@@ -17,15 +17,17 @@ The search form for dataset search
 
 {% block errors %}{{ form.errors(search_error) }}{% endblock %}
 
+{%- set clear_url =  h.url_for(controller=c.controller, action=c.action, id=c.id) %}
+{% set fields_grouped = h.eaw_mk_fields_grouped() %}
+
 <form id="{{ form_id }}"
       class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %} search-form"
       method="get" data-module="select-switch"
-      data-module-target="select">  
-      {%- set clear_url =  h.url_for(controller='package', action='search') %}
-
+      data-module-target="select">
+  
       {# Variables #}
       {%- set taglist_variables=h.eaw_taglist("variables") %}
-      {%- set select = c.fields_grouped['eaw_fqfield_variables'] %}
+      {%- set select = fields_grouped['eaw_fqfield_variables'] %}
       {%- set id = "field-variables"%}
       {%- set name = "eaw_fqfield_variables" %}
       {%- set title = _('Variables') %}
@@ -34,7 +36,8 @@ The search form for dataset search
       tag3=taglist_variables[2].value) %}
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {% set selected = c.fields_grouped['OP_' ~ name]|first %}
+      {% set selected = fields_grouped['OP_' ~ name]%}
+      {{ selected }}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -54,7 +57,7 @@ The search form for dataset search
 
       {# Systems #}
       {%- set taglist_variables=h.eaw_taglist("systems") %}
-      {%- set select = c.fields_grouped['eaw_fqfield_systems'] %}
+      {%- set select = fields_grouped['eaw_fqfield_systems'] %}
       {%- set id = "field-systems"%}
       {%- set name = "eaw_fqfield_systems" %}
       {%- set title = _('Systems') %}
@@ -63,7 +66,7 @@ The search form for dataset search
       tag3=taglist_variables[2].value) %}
       {%- set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {%- set selected = c.fields_grouped['OP_' ~ name]|first %}
+      {%- set selected = fields_grouped['OP_' ~ name] %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -82,8 +85,8 @@ The search form for dataset search
       </div>
 
       {# Time range #}
-      {% set timestartval = c.fields_grouped['timestart'] %}
-      {% set timeendval = c.fields_grouped['timeend'] %} 
+      {% set timestartval = fields_grouped['eaw_fqfield_timestart'] %}
+      {% set timeendval = fields_grouped['eaw_fqfield_timeend'] %} 
       {%- set title = _('Time(-Range)') %}
 
       <div style="float:left;margin-right:5px;">

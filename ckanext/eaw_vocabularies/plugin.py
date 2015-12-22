@@ -33,6 +33,20 @@ def eaw_get_facetfields():
 def eaw_get_facetnames():
     return(list(set([ff[0] for ff in eaw_get_facetfields()])))
 
+def eaw_mk_fields_grouped():
+    ''' c.fields_grouped are only provided by package-controller,
+    not by group-controller. So we do it ourselves.'''
+    
+    fields_grouped = {}
+    for f in tk.c.fields:
+        try:
+            fields_grouped[f[0]].append(f[1])
+        except AttributeError:
+            fields_grouped[f[0]] = [fields_grouped[f[0]], f[1]]
+        except KeyError:
+            fields_grouped[f[0]] = f[1]
+    return(fields_grouped)
+
 def mk_field_queries(search_params, vocabfields):
     '''
     Customizes the fq-search-string so that query-terms
@@ -59,9 +73,6 @@ def mk_field_queries(search_params, vocabfields):
         return(tstamp + "Z" if len(tstamp.split(":")) == 3 else tstamp)
 
     def _fix_timefields(d):
-        c.fields_grouped.pop('timestart', None)
-        c.fields_grouped.pop('timeend', None)
-        c.fields_grouped.update(d)
         c.fields = [x for x in c.fields if x[0] not in ['timestart', 'timeend']]
 
     def _vali_daterange(trange):
@@ -111,9 +122,7 @@ def mk_field_queries(search_params, vocabfields):
     def _collect_fqfields(queryfield):
         querystring = search_params.get(queryfield, '');
         querystring = re.sub(": +", ":", querystring)
-        print("querystring: {}".format(querystring))
         querylist = [e.split(':', 1) for e in querystring.split()]
-        print("querylist for {}: {}".format(queryfield, querylist))
         # extract operator_fields
         operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
         # extract eaw_fqfields
@@ -128,6 +137,7 @@ def mk_field_queries(search_params, vocabfields):
         operator_fields = {x[0].replace('eaw_fqfield_', ''): x[1]
                            for x in operator_fields.items()}
         return((querylist, fq_list_eaw, operator_fields))
+
     
     fq_list_orig, fq_list_eaw, operator_fields = _collect_fqfields('fq')
     q_list_orig, fq_list_eaw_q, operator_fields_q = _collect_fqfields('q')
@@ -154,6 +164,10 @@ def mk_field_queries(search_params, vocabfields):
     q_query = ''
     for f in q_list_orig:
         q_query += ' ' + f[0]
+        try:
+            q_query += ':'+f[1]
+        except IndexError:
+            pass
     search_params['fq'] = fq_query
     search_params['q'] = q_query
     return(search_params)    
@@ -222,7 +236,8 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
         return({'eaw_taglist': eaw_taglist,
                 'eaw_getnow': eaw_getnow,
                 'eaw_get_facetfields': eaw_get_facetfields,
-                'eaw_get_facetnames': eaw_get_facetnames
+                'eaw_get_facetnames': eaw_get_facetnames,
+                'eaw_mk_fields_grouped':eaw_mk_fields_grouped
         })
 
     # IPackageController
