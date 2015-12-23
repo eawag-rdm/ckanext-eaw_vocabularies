@@ -242,13 +242,14 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
 
     # IPackageController
     def before_search(self, search_params):
-        print("before_search - input: search_params")
-        print(search_params)
+        # print("before_search - input: search_params")
+        # print(search_params)
         sp = mk_field_queries(search_params, self._vocab_fields)
-        print("before_search - output: search_params")
-        print(sp)
+        # print("before_search - output: search_params")
+        # print(sp)
         # print("before_search - facetfields:")
         # print(eaw_get_facetfields())
         return(sp)
+
 
     

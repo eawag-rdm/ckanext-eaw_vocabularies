@@ -37,7 +37,6 @@ The search form for dataset search
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
       {% set selected = fields_grouped['OP_' ~ name]%}
-      {{ selected }}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
