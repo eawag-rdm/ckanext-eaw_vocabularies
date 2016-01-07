@@ -39,18 +39,18 @@ The search form for dataset search
       {% set selected = fields_grouped['OP_' ~ name]%}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
-	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+	<select class="filterselect fouc" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	  {% for option in taglist_variables %}
-            <option value="{{ option.value }}"{% if option.value in select %}
-		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
-		  {% endfor %}
+          <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
+		  selected="selected"{% endif %}>{{ option.text or option.value }}</option>
+	  {% endfor %}
 	</select>
 	
-	<input type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
+	<input class="fouc" type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
 	       id="and-or" name="OP_{{ name }}" data-module="andorswitch"
 	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-	<label class="checkbox">
-	  <span class="js-hide">find ANY</span>
+	<label class="checkbox fouc">
+	  <span>find ANY</span>
 	</label>
       </div>
 
@@ -70,17 +70,17 @@ The search form for dataset search
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
 	  {% for option in taglist_variables %}
-            <option value="{{ option.value }}"{% if option.value in select %}
+            <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
 		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
 		  {% endfor %}
 	</select>
 	
-	  <input type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
-		 id="and-or" name="OP_{{ name }}" data-module="andorswitch"
-		 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-	  <label class="checkbox">
-	    <span class="js-hide">find ANY</span>
-	  </label>
+	<input class="fouc" type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
+	       id="and-or" name="OP_{{ name }}" data-module="andorswitch"
+	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
+	<label class="checkbox fouc">
+	  <span>find ANY</span>
+	</label>
       </div>
 
       {# Time range #}
@@ -121,34 +121,34 @@ The search form for dataset search
 	  <i class="icon-ban-circle"></i>
 	  {{ _('Clear') }}
 	</a>
-	<button class="btn js-hide hidden_submit_btn" type="submit">
+	<button class="btn fouc" type="submit">
 	  <i class="icon-search"></i>
 	  {{ _('Filter') }}
 	</button>
       </div>
       
       <div> 
-      	<ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs"  
-      	    data-module-target="#advancedsearch" data-module-query={{ query }}>  
-      	    <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>  
+	<ul class="nav nav-pills advsearchbutton" data-module="eaw_theme_hidewithjs" data-module-target="#advancedsearch" data-module-query={{ query }}>
+      	  <li><a href="#">{{ _('Advanced Search') }} <span class="caret"></span></a></li>  
       	</ul>  
-	<div id="advancedsearch" class="togglesearch search-geant">
-      	  <div class="presearchboxtext">  
-      	    <h4> Advanced Search</h4> 
+	<div id="advancedsearch" class="fouc">
+      	  <div class="presearchboxtext">
+      	    <h4 > Advanced Search</h4> 
       	    You can use the <a target="_blank" 
       	    href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser"> 
       	    Solr query syntax</a> here. For starters, just type any term to 
-      	    search for it across all fields in all packages. 
-      	    <div class="search-input"> 
-      	      <input type="text" class="search" name="q" value="{{ query }}"    
-      		     autocomplete="off" placeholder="type query ...">    
-		     <button type="submit" value="search" class="outsidebutton"> 
-		       <i class="icon-search"></i>   
-		       <span>{{ _('Search') }}</span>   
-		     </button>
-      	    </div> 
-      	  </div>  
-      	</div>
+      	    search for it across all fields in all packages.
+	  </div>
+      	  <div>
+      	    <input type="text" class="search wide-search" name="q" value="{{ query }}"    
+      		   autocomplete="off" placeholder="type query ...">    
+	    <button type="submit" value="search" class="outsidebutton"> 
+	      <i class="icon-search"></i>   
+	      <span>{{ _('Search') }}</span>   
+	    </button>
+      	  </div> 
+      	</div>  
+      </div>
 	
 	{% block search_search_fields %}
 	  {% set facet_fields=h.eaw_get_facetfields() %}
