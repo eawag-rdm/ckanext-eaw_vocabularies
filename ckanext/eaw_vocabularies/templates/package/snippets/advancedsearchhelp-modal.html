@@ -1,0 +1,20 @@
+{# The content of a modal to give help on the syntax for advanced search..
+   Should be used from a button like so:  
+   <button  type="button" class="outsidebutton second"
+	    data-module="eaw_vocabularies_daterange_info"  
+ 	    data-module-target="#advancdsearchhelp">  
+ 	    <i class="icon-info-sign"></i>  
+   </button> 
+#}
+	  
+<div id="advancedsearchhelp" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Advanced search</h3>
+  </div>
+  <div class="modal-body">
+    You can use the <a href="https://cwiki.apache.org/confluence/display/solr/The+Standard+Query+Parser" target="_blank">Solr query syntax</a> here.
+    For starters, just type any term to search for it across all fields in all packages.
+  </div>
+</div> 
+
