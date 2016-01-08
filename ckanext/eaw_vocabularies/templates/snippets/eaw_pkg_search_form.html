@@ -1,7 +1,6 @@
 {#
 The search form for dataset search
 #}
-
 {% import 'macros/form.html' as form %}
 {% resource 'bootstrap-switch/bootstrap-switch.js' %}
 {% resource 'bootstrap-switch/bootstrap-switch.css' %}
@@ -15,7 +14,7 @@ The search form for dataset search
   {% set form_id="dataset-search-form" %}
 {% endif %}
 
-{% block errors %}{{ form.errors(search_error) }}{% endblock %}
+{% block errors %}{{ form.errors(c.search_errors, type="error") }}{% endblock %}
 
 {%- set clear_url =  h.url_for(controller=c.controller, action=c.action, id=c.id) %}
 {% set fields_grouped = h.eaw_mk_fields_grouped() %}
