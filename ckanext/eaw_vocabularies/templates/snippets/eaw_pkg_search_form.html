@@ -35,7 +35,7 @@ The search form for dataset search
       tag3=taglist_variables[2].value) %}
       {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {% set selected = fields_grouped['OP_' ~ name]%}
+      {% set selected = fields_grouped['OP_' ~ name] |first %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect fouc" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -64,7 +64,7 @@ The search form for dataset search
       tag3=taglist_variables[2].value) %}
       {%- set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
       'placeholder="' ~ placeholder ~'"'  %}
-      {%- set selected = fields_grouped['OP_' ~ name] %}
+      {%- set selected = fields_grouped['OP_' ~ name] |first %}
       <h4 class="h4searchlabel">{{ title }}</h4>
       <div>
 	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
@@ -90,7 +90,7 @@ The search form for dataset search
       <div class="time-search {% if c.search_errors.timerange %}error{% endif %}">
 	<h4 class="h4searchlabel">Time-Start</h4>
 	<div class="search-input">
-	  <input style="width:24ex; error" type="text" id="time-start"
+	  <input style="width:24ex;" type="text" id="time-start"
 		 name="eaw_fqfield_timestart" value="{{ timestartval }}"/>
       	</div>
       </div>

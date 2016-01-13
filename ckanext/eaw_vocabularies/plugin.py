@@ -41,10 +41,8 @@ def eaw_mk_fields_grouped():
     for f in tk.c.fields:
         try:
             fields_grouped[f[0]].append(f[1])
-        except AttributeError:
-            fields_grouped[f[0]] = [fields_grouped[f[0]], f[1]]
         except KeyError:
-            fields_grouped[f[0]] = f[1]
+            fields_grouped[f[0]] = [f[1]]
     return(fields_grouped)
 
 def mk_field_queries(search_params, vocabfields):
