@@ -94,8 +94,8 @@
     {
       "field_name": "author",
       "label": "Author",
-      "form_placeholder": "Joe Bloggs",
-      "display_property": "dc:creator"
+	"display_property": "dc:creator",
+	"display_value": "Harry"
     },
     {
       "field_name": "author_email",
@@ -141,10 +141,6 @@
       "field_name": "format",
       "label": "Format",
       "preset": "resource_format_autocomplete"
-<<<<<<< Updated upstream
-    }
-
-=======
     },
       {
 	  "field_name": "resource_type",
@@ -152,7 +148,9 @@
 	  "label": "Resource Type",
 	  "vocabulary": "resource_type",
 	  "required": true
+      },
+      { "field_name": "rights_holder",
+	"label": "Rights Holder"
       }
->>>>>>> Stashed changes
   ]
 }
