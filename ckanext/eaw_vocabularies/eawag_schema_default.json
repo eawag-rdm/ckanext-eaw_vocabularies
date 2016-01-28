@@ -10,107 +10,91 @@
       "label": "Title",
       "preset": "title",
       "form_placeholder": "A descriptive title",
+      "display_property": "dct:title",
       "required": true
     },
     {
       "field_name": "name",
       "label": "URL",
       "preset": "dataset_slug",
-      "form_placeholder": "eg. my-dataset"
+      "display_property": "dcat:landingPage",
+      "required": true
     },
-      {
-	"field_name": "notes",
-	"label": "Abstract",
-	"form_snippet": "markdown.html",
-	"form_placeholder": "A description of the package.",
-	"required": true
+    {
+      "field_name": "notes",
+      "label": "Abstract",
+      "form_snippet": "markdown.html",
+      "form_placeholder": "A description of the package.",
+      "display_property": "dct:description",
+      "required": true
       },
-      {"field_name": "test_select",
-       "label": "Test select",
-       "preset": "select",
-       "choices": [
-	   {
-	       "value": "one",
-	       "label": "One"
-	   },
-	   {
-	       "value": "two",
-	       "label": "Two"
-	   }
-       ]},
     {
       "field_name": "tag_string",
-	"label": "Keywords",
-	"preset": "tag_string_autocomplete", 
-	"form_placeholder": "eg. hydrology, discharge, taxonomy, molbiol"
-    },
-      {
-	  "field_name": "variables",
-	  "label": "Variables",
-	  "preset": "select",
-	  "vocabulary": "variables"
-	  
-      },
-      {
-	  "field_name": "systems",
-	  "label": "Systems",
-	  "preset": "multiple_select",
-	  "vocabulary": "systems",
-	  "required": true
-      },
-    {
-      "field_name": "version",
-      "label": "Version",
-      "validators": "ignore_missing unicode package_version_validator",
-      "form_placeholder": "1.0"
+      "label": "Keywords",
+      "preset": "tag_string_autocomplete", 
+      "form_placeholder": "eg. discharge, soil, taxonomy, LC-MS ...",
+      "display_property": "dcat:keyword",
+      "required": true
     },
     {
-	"field_name": "owner_org",
-	"label": "Organization",
-	"preset": "dataset_organization"
-    },
-      {
-	  "field_name": "status",
-	  "label": "Status",
-	  "required": true,
-	  "choices": [
-	      {
-		  "value": "incomplete",
-		  "label": "incomplete"
-	      },
-	      {
-		  "value": "complete",
-		  "label": "complete"
-	
-	      },
-	      {
-		  "value": "other",
-		  "label": "other"
-	      }
-	  ],
-	  "preset": "select"
-      },
-
-    {
-      "field_name": "author",
-      "label": "Author",
-	"display_property": "dc:creator",
-	"display_value": "Harry"
+      "field_name": "variables",
+      "label": "Variables",
+      "preset": "multiple_select",
+      "vocabulary": "variables",
+      "select_size": 5,
+      "required": true
     },
     {
-      "field_name": "author_email",
-      "label": "Author Email",
-      "form_placeholder": "joe@example.com",
-      "display_property": "dc:creator",
-      "display_snippet": "email.html",
-      "display_email_name_field": "author"
+      "field_name": "systems",
+      "label": "Systems",
+      "preset": "multiple_select",
+      "vocabulary": "systems",
+      "select_size": 5,
+      "required": true
+    },
+    {
+      "field_name": "owner_org",
+      "label": "Organization",
+      "preset": "dataset_organization"
+    },
+    {
+      "field_name": "status",
+      "label": "Status",
+      "required": true,
+      "display_property": "adms:status",
+      "preset": "select",
+      "choices": [
+	{
+	  "value": "incomplete",
+	  "label": "incomplete"
+	},
+	{
+	  "value": "complete",
+	  "label": "complete"
+	},
+	{
+	  "value": "reviewed",
+	  "label": "reviewed"
+	}
+      ]
     },
     {
       "field_name": "maintainer",
-      "label": "Maintainer",
-      "form_placeholder": "Joe Bloggs",
-      "display_property": "dc:contributor"
+      "label": "Curator(s)",
+      "form_placeholder": "Johann Meierbär <joe@eawag.ch>",
+      "display_property": "datacite:datacurator",
+      "help_text": "Person(s) responsible for completeness and quality of data and meta-data. Only required if \"Author(s)\" is not given.",
+      "help_inline": true
     },
+    {
+      "field_name": "author",
+      "preset": "repeating_text",
+      "label": "Author(s)",
+      "form_placeholder": "joe@eawag.ch",
+      "display_property": "dc:creator",
+      "display_email_name_field": "author"
+    },
+
     {
       "field_name": "maintainer_email",
       "label": "Maintainer Email",
