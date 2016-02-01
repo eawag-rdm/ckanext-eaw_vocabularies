@@ -1,33 +1,19 @@
 {% import 'macros/form.html' as form %}
-{% resource 'eaw_vocabularies/repeating_js.js' %}
+{% resource 'eaw_vocabularies/lcrnz-repeating.js' %}
 
-{%- set values = data.get(field.field_name, [])
-+ [''] * field.get(form_blanks, 3) -%}
-<div data-module="repeating_js">
-  {%- for element in values -%}
-    {{ form.input(
-    field.field_name + '-' ~ loop.index,
-    id='field-' + field.field_name + '-' ~ loop.index,
-    label=h.scheming_language_text(field.label) + ' ' ~ loop.index,
-    placeholder=h.scheming_language_text(field.form_placeholder),
-    value=element,
-    error=errors[field.field_name],
-    attrs=field.form_attrs if 'form_attrs' in field else {}, 
-    classes=['control-medium'],
-    is_required=h.scheming_field_required(field)
-    ) }}
-  {%- endfor -%}
+<div data-module="lcrnz-repeating">                                    
+  {%- set values = data.get(field.field_name, []) + [''] -%} 
+  {%- for value in values -%} 
+    <div class="control-repeating"> 
+        {{ form.input(field.field_name + '-' ~ loop.index, 
+	id='field-' + field.field_name + '-' ~ loop.index, 
+	label=h.scheming_language_text(field.label) + ' ' ~ loop.index, 
+	placeholder=h.scheming_language_text(field.form_placeholder), 
+        value=value, 
+	error=errors[field.field_name], 
+        classes=['control-medium'], 
+	is_required=h.scheming_field_required(field) 
+      ) }} 
+    </div> 
+  {%- endfor -%} 
 </div>
-  
-  {# #}
-{# attrs={'data-module': 'yeah'}, #}
-
-  {# <button type="button" class="btn btn-mini" #}
-  {# 	  style="position:relative;top:-10px;background:transparent;" #}
-  {# 	  data-module="repeating_js" data-module-typ="del" #}
-  {# 	  data-module-idx="{{ loop.index }}" > #}
-  {#   <i class="icon-trash"></i>    #}
-  {# </button> #}
-  {# <button class="btn btn-mini" type="button" style="position:relative;top:-10px;background:transparent;"> #}
-  {#   <i class="icon-plus-sign"></i>    #}
-  {# </button> #}

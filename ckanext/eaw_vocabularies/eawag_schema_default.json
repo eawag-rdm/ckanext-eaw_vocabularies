@@ -80,7 +80,8 @@
     },
     {
       "field_name": "maintainer",
-      "label": "Curator(s)",
+      "label": "Curator",
+      "preset": "repeating_text_js",
       "form_placeholder": "Johann Meierbär <joe@eawag.ch>",
       "display_property": "datacite:datacurator",
       "help_text": "Person(s) responsible for completeness and quality of data and meta-data. Only required if \"Author(s)\" is not given.",
@@ -88,21 +89,13 @@
     },
     {
       "field_name": "author",
-      "preset": "repeating_text_js",
       "label": "Author(s)",
+      "preset": "repeating_text_js",
       "form_placeholder": "joe@eawag.ch",
       "display_property": "dc:creator",
       "display_email_name_field": "author"
-    },
-
-    {
-      "field_name": "maintainer_email",
-      "label": "Maintainer Email",
-      "form_placeholder": "joe@example.com",
-      "display_property": "dc:contributor",
-      "display_snippet": "email.html",
-      "display_email_name_field": "maintainer"
     }
+
   ],
   "resource_fields": [
     {
