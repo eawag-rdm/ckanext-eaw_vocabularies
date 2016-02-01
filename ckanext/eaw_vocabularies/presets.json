@@ -4,12 +4,20 @@
   "about_url": "http://github.com/open-data/ckanext-repeating",
   "presets": [
     {
-	"preset_name": "repeating_text_js",
+      "preset_name": "repeating_text_js",
       "values": {
         "form_snippet": "repeating_text_js.html",
         "display_snippet": "repeating_text.html",
         "validators": "repeating_text",
         "output_validators": "repeating_text_output"
+      }
+    },
+      {
+	"preset_name": "select_short",
+	"values": {
+	"form_snippet": "select_short.html",
+	"display_snippet": "select.html",
+	"validators": "scheming_required scheming_choices"
       }
     }
   ]

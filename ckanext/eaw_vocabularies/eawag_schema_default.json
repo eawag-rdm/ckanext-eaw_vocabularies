@@ -60,9 +60,10 @@
     {
       "field_name": "status",
       "label": "Status",
+      "form_attrs": {"class": "shortinput"},
       "required": true,
       "display_property": "adms:status",
-      "preset": "select",
+      "preset": "select_short",
       "choices": [
 	{
 	  "value": "incomplete",
@@ -81,19 +82,22 @@
     {
       "field_name": "maintainer",
       "label": "Curator",
-      "preset": "repeating_text_js",
+      "required": "true",
+      "form_snippet": "text_short.html",
       "form_placeholder": "Johann Meierbär <joe@eawag.ch>",
       "display_property": "datacite:datacurator",
-      "help_text": "Person(s) responsible for completeness and quality of data and meta-data. Only required if \"Author(s)\" is not given.",
+      "help_text": "Person responsible for completeness and quality of data and meta-data.",
       "help_inline": true
     },
     {
       "field_name": "author",
-      "label": "Author(s)",
+      "label": "Author",
       "preset": "repeating_text_js",
       "form_placeholder": "joe@eawag.ch",
       "display_property": "dc:creator",
-      "display_email_name_field": "author"
+      "display_email_name_field": "author",
+      "help_text": "Persons that take scientific credit. Required IFF valid for all resources of the package",
+      "help_inline": true
     }
 
   ],
