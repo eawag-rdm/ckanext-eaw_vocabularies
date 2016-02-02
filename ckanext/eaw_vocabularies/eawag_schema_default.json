@@ -53,6 +53,11 @@
       "required": true
     },
     {
+      "field_name": "time",
+      "label": "Time",
+      "preset": "date"
+    },
+    {
       "field_name": "owner_org",
       "label": "Organization",
       "preset": "dataset_organization"

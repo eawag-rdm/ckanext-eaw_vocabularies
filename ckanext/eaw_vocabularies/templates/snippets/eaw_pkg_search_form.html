@@ -83,8 +83,8 @@ The search form for dataset search
       </div>
 
       {# Time range #}
-      {% set timestartval = fields_grouped['eaw_fqfield_timestart'] %}
-      {% set timeendval = fields_grouped['eaw_fqfield_timeend'] %} 
+      {% set timestartval = fields_grouped['eaw_fqfield_timestart'] |first %}
+      {% set timeendval = fields_grouped['eaw_fqfield_timeend'] |first %} 
       {%- set title = _('Time(-Range)') %}
 
       <div class="time-search {% if c.search_errors.timerange %}error{% endif %}">

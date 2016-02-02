@@ -43,7 +43,7 @@ def eaw_mk_fields_grouped():
             fields_grouped[f[0]].append(f[1])
         except KeyError:
             fields_grouped[f[0]] = [f[1]]
-    return(fields_grouped)
+    return fields_grouped
 
 def mk_field_queries(search_params, vocabfields):
     '''
@@ -69,9 +69,6 @@ def mk_field_queries(search_params, vocabfields):
 
     def _fix_timestamp(tstamp):
         return(tstamp + "Z" if len(tstamp.split(":")) == 3 else tstamp)
-
-    def _fix_timefields(d):
-        c.fields = [x for x in c.fields if x[0] not in ['timestart', 'timeend']]
 
     def _vali_daterange(trange):
         print("_valid_daterange trange: {}".format(trange))
@@ -99,7 +96,6 @@ def mk_field_queries(search_params, vocabfields):
 
                 fqd["timerange"] = "[* TO " + fqd["timeend"] + "]"
                 fqd["timerange"] = _vali_daterange(fqd["timerange"])
-                _fix_timefields({'timestart': "*", 'timeend': fqd["timeend"]}) 
                 return(fqd)
         else:
             try:
@@ -107,14 +103,11 @@ def mk_field_queries(search_params, vocabfields):
             except KeyError:
                 fqd["timerange"] = fqd["timestart"]
                 fqd["timerange"] = _vali_daterange(fqd["timerange"])
-                _fix_timefields({'timestart': fqd["timestart"]}) 
                 return(fqd)
             else:
                 fqd["timerange"] = ("[" + fqd["timestart"] + " TO "
                                     + fqd["timeend"] + "]")
                 fqd["timerange"] = _vali_daterange(fqd["timerange"])
-                _fix_timefields({'timestart': fqd["timestart"],
-                                 'timeend': fqd["timeend"]})
                 return(fqd)
             
     def _collect_fqfields(queryfield):
