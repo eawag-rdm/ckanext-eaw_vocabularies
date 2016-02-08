@@ -20,7 +20,7 @@ class SolrDaterange(object):
                   'day': r'(?P<day>\d{2})',
                   'hour': r'(?P<hour>([01][0-9]|2[0-3]))',
                   'minute': r'(?P<minute>[0-5][0-9])',
-                  'second': r'(?P<second>[0-5][0-9](\.\d{1,})?Z)'
+                  'second': r'(?P<second>[0-5][0-9](\.\d{3})?Z?)'
                   }
     
     regex_implicit_range = re.compile(
@@ -88,6 +88,12 @@ class SolrDaterange(object):
                              .format(rangestr))
         else:
             return(matchres.groupdict())
+
+    @classmethod
+    def _check_time_direction(cls, start, end):
+        if [start, end] != sorted([start, end]):
+            raise Invalid("You inverted the arrow of time!\n" +
+                          "{} < {}".format(end, start))
     
     @classmethod
     def validate(cls, datestr):
@@ -99,5 +105,6 @@ class SolrDaterange(object):
         else:
             cls._check_month_day_validity(cls._check_implicit_range(d['start']))
             cls._check_month_day_validity(cls._check_implicit_range(d['end']))
+            cls._check_time_direction(d['start'], d['end']) 
         return(datestr)
 
