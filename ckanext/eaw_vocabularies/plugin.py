@@ -111,9 +111,12 @@ def mk_field_queries(search_params, vocabfields):
                 return(fqd)
             
     def _collect_fqfields(queryfield):
-        querystring = search_params.get(queryfield, '');
+        querystring = search_params.get(queryfield, '')
         querystring = re.sub(": +", ":", querystring)
-        querylist = [e.split(':', 1) for e in querystring.split()]
+        ## split querystring at spaces if space doesn't occur in quotes
+        PATTERN = re.compile(r'''((?:[^ "']|"[^"]*"|'[^']*')+)''')
+        splitquery = PATTERN.split(querystring)[1::2]
+        querylist = [e.split(':', 1) for e in splitquery]
         # extract operator_fields
         operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
         # extract eaw_fqfields
