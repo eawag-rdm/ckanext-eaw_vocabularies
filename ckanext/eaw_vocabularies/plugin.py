@@ -114,8 +114,9 @@ def mk_field_queries(search_params, vocabfields):
         querystring = search_params.get(queryfield, '')
         querystring = re.sub(": +", ":", querystring)
         ## split querystring at spaces if space doesn't occur in quotes
-        PATTERN = re.compile(r'''((?:[^ "']|"[^"]*"|'[^']*')+)''')
-        splitquery = PATTERN.split(querystring)[1::2]
+        ## http://stackoverflow.com/a/2787064
+        pat = re.compile(r'''((?:[^ "']|"[^"]*"|'[^']*')+)''')
+        splitquery = pat.split(querystring)[1::2]
         querylist = [e.split(':', 1) for e in splitquery]
         # extract operator_fields
         operator_fields = dict([x for x in querylist if x[0].startswith('OP_')])
