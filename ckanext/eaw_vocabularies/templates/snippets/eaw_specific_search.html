@@ -1,0 +1,25 @@
+{# renders a field-specific multiple section search-box, #}
+{# such as for "variables" or "systems" #}
+
+{% set id="field-" ~ fieldname %}
+{% set name="eaw_fqfield_" ~ fieldname %}
+{% set select=fields_grouped[name] %} 
+{%- set placeholder = 'eg. %(tag1)s, ...'|format(tag1=options[0].label) %}
+{% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
+'placeholder="' ~ placeholder ~'"'  %}
+{% set selected = fields_grouped['OP_' ~ name] |first %}
+<h4 class="h4searchlabel">{{ title }}</h4>
+<div>
+  <select class="filterselect fouc" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
+    {% for option in options %}
+      <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
+	      selected="selected"{% endif %}>{{ option.label or option.value }}</option>
+     {% endfor %}
+  </select>
+  <input class="fouc" type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
+	 id="and-or" name="OP_{{ name }}" data-module="andorswitch"
+	 value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
+	 <label class="checkbox fouc">
+	   <span>find ANY</span>
+	 </label>
+</div>

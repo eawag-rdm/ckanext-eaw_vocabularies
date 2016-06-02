@@ -20,68 +20,29 @@ The search form for dataset search
 {% set fields_grouped = h.eaw_mk_fields_grouped() %}
 
 <form id="{{ form_id }}"
-      class="form-inline {% if no_bottom_border %} no-bottom-border{% endif %} search-form"
+      class="form-inline {% if no_bottom_border %} no-bottom-border{%
+      endif %} search-form"
       method="get" data-module="select-switch"
       data-module-target="select">
-  
+
       {# Variables #}
-      {%- set taglist_variables=h.eaw_taglist("variables") %}
-      {%- set select = fields_grouped['eaw_fqfield_variables'] %}
-      {%- set id = "field-variables"%}
-      {%- set name = "eaw_fqfield_variables" %}
-      {%- set title = _('Variables') %}
-      {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
-      |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
-      tag3=taglist_variables[2].value) %}
-      {% set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
-      'placeholder="' ~ placeholder ~'"'  %}
-      {% set selected = fields_grouped['OP_' ~ name] |first %}
-      <h4 class="h4searchlabel">{{ title }}</h4>
-      <div>
-	<select class="filterselect fouc" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
-	  {% for option in taglist_variables %}
-          <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
-		  selected="selected"{% endif %}>{{ option.text or option.value }}</option>
-	  {% endfor %}
-	</select>
-	
-	<input class="fouc" type="checkbox" onchange="$( '#{{ form_id }}' ).submit();"
-	       id="and-or" name="OP_{{ name }}" data-module="andorswitch"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-	<label class="checkbox fouc">
-	  <span>find ANY</span>
-	</label>
-      </div>
-
+      {% set fieldname='variables' %}
+      {% snippet 'snippets/eaw_specific_search.html',
+      title=_('Variables'),
+      fieldname=fieldname,
+      options=h.eaw_choices(fieldname, dataset_type),
+      fields_grouped=fields_grouped,
+      form_id=form_id %}
+      
       {# Systems #}
-      {%- set taglist_variables=h.eaw_taglist("systems") %}
-      {%- set select = fields_grouped['eaw_fqfield_systems'] %}
-      {%- set id = "field-systems"%}
-      {%- set name = "eaw_fqfield_systems" %}
-      {%- set title = _('Systems') %}
-      {%- set placeholder = 'eg. %(tag1)s, %(tag2)s, %(tag3)s, ...'
-      |format(tag1=taglist_variables[0].value,tag2=taglist_variables[1].value,
-      tag3=taglist_variables[2].value) %}
-      {%- set attrs = 'multiple="multiple" '  ~ 'data-module="autocomplete" ' ~
-      'placeholder="' ~ placeholder ~'"'  %}
-      {%- set selected = fields_grouped['OP_' ~ name] |first %}
-      <h4 class="h4searchlabel">{{ title }}</h4>
-      <div>
-	<select class="filterselect" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
-	  {% for option in taglist_variables %}
-            <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
-		    selected="selected"{% endif %}>{{ option.text or option.value }}</option>
-		  {% endfor %}
-	</select>
-	
-	<input class="fouc" type="checkbox" onchange="$( '#{{form_id }}' ).submit();"
-	       id="and-or" name="OP_{{ name }}" data-module="andorswitch"
-	       value="OR" {% if selected == "OR" %}checked="checked"{% endif %} />
-	<label class="checkbox fouc">
-	  <span>find ANY</span>
-	</label>
-      </div>
-
+      {% set fieldname='systems' %}   
+      {% snippet 'snippets/eaw_specific_search.html',
+      title=_('Systems'),
+      fieldname=fieldname,  
+      options=h.eaw_choices(fieldname, dataset_type),   
+      fields_grouped=fields_grouped,
+      form_id=form_id %}
+      
       {# Time range #}
       {% set timestartval = fields_grouped['eaw_fqfield_timestart'] |first %}
       {% set timeendval = fields_grouped['eaw_fqfield_timeend'] |first %} 
@@ -176,36 +137,14 @@ The search form for dataset search
 
   {% block search_title %}
     {% if not no_title %}
-      <h2>{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+      
+      <h2>{% snippet 'snippets/search_result_text.html', query=query,
+	count=count, type=dataset_type %}</h2>
+      
     {% endif %}
   {% endblock %}
-
-  <hr />
   
-  {# {% block search_facets %} #}
-  {#   {% set facet_names = h.eaw_get_facetnames() %} #}
-  {#   {% if facet_names %} #}
-  {#     <p class="filter-list"> #}
-  {#       {% for field in facet_names %} #}
-  {#         {% set search_facets_items = facets.search.get(field)['items'] %} #}
-  {#         <span class="facet">{{ facets.titles.get(field) }}:</span> #}
-  {#         {% for value in facets.fields[field] %} #}
-  {#           <span class="filtered pill"> #}
-  {#             {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%} #}
-  {#               {{ facets.translated_fields[(field,value)] }} #}
-  {#             {%- else -%} #}
-  {#               {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }} #}
-  {#             {%- endif %} #}
-  {#             <a href="{{ facets.remove_field(field, value) }}" #}
-  {# 		 class="remove" title="{{ _('Remove') }}"> #}
-  {# 		 <i class="icon-remove"></i></a> #}
-  {#           </span> #}
-  {#         {% endfor %} #}
-  {#       {% endfor %} #}
-  {#     </p>      #}
-  {#     <a class="show-filters btn">{{ _('Filter Results') }}</a> #}
-  {#   {% endif %} #}
-  {# {% endblock %} #}
+  <hr />
 </form>
 
 {% if show_empty and count == 0 %}

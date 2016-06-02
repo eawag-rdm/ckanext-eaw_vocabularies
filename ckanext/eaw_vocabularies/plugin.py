@@ -2,6 +2,7 @@ from pylons import c
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 import ckanext.eaw_vocabularies.validate_solr_daterange as dr
+from ckantoolkit import h
 
 import datetime as dt
 import re
@@ -13,14 +14,14 @@ CUSTOM_SEARCH_FIELDS = ['variables', 'systems']
 CUSTOM_OPS = ['OP_' + field for field in CUSTOM_SEARCH_FIELDS]
 
 # template helper functions
-def eaw_taglist(vocab_name, pad=False):
-    tag_list = tk.get_action('tag_list')
-    tags = tag_list(data_dict={'vocabulary_id': vocab_name})
-    tags = [{'value': tag} for tag in tags]
-    if pad:
-        tags = [{'value': ' '}] + tags
-    return(tags)
-
+def eaw_choices(fieldname, dataset_type):
+    '''Returns the list of choices fieldname in from scheming_schema'''
+    options = tk.get_action('scheming_dataset_schema_show')(
+        {}, {'type': dataset_type, 'expanded': False})
+    options = [x.get('choices') for x in options.get('dataset_fields')
+               if x.get('field_name') == fieldname][0]
+    return(options)
+ 
 def eaw_getnow():
     ''' Current date in ISO 8601'''
     return(dt.date.today().isoformat())
@@ -45,7 +46,8 @@ def eaw_mk_fields_grouped():
             fields_grouped[f[0]] = [f[1]]
     return fields_grouped
 
-def mk_field_queries(search_params, vocabfields):
+#def mk_field_queries(search_params, vocabfields):
+def mk_field_queries(search_params):
     '''
     Customizes the fq-search-string so that query-terms
     referring to the same <field> (e.g. "example_field") are combined
@@ -64,8 +66,8 @@ def mk_field_queries(search_params, vocabfields):
             operator = "AND"
         return(operator)
 
-    def _prefix(fn):
-        return("vocab_"+fn if fn in vocabfields else fn)
+    # def _prefix(fn):
+    #     return("vocab_"+fn if fn in vocabfields else fn)
 
     def _fix_timestamp(tstamp):
         return(tstamp + "Z" if len(tstamp.split(":")) == 3 else tstamp)
@@ -152,7 +154,7 @@ def mk_field_queries(search_params, vocabfields):
     # assemble fq-query-string
     fq_query = ''
     for f in fq_dict.items():
-        fq_query += ' ' + _prefix(f[0]) + ':(' + f[1] + ')'
+        fq_query += ' ' + f[0] + ':(' + f[1] + ')'
     for f in fq_list_orig:
         fq_query += ' ' + f[0] + ':(' + f[1] + ')'
     # re-assemble q-query-string
@@ -172,9 +174,6 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     p.implements(p.ITemplateHelpers)
     p.implements(p.IPackageController, inherit=True)
     
-    # We need a list of all vocabulary fields
-    _vocab_fields = [v['name'] for v in tk.get_action('vocabulary_list')()]
-    
     # IConfigurer
     def update_config(self, config_):
         tk.add_template_directory(config_, 'templates')
@@ -183,7 +182,7 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     
     # ITemplateHelpers
     def get_helpers(self):
-        return({'eaw_taglist': eaw_taglist,
+        return({'eaw_choices': eaw_choices,
                 'eaw_getnow': eaw_getnow,
                 'eaw_get_facetfields': eaw_get_facetfields,
                 'eaw_get_facetnames': eaw_get_facetnames,
@@ -194,9 +193,9 @@ class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
     def before_search(self, search_params):
         # print("before_search - input: search_params")
         # print(search_params)
-        sp = mk_field_queries(search_params, self._vocab_fields)
-        # print("before_search - output: search_params")
-        # print(sp)
+        sp = mk_field_queries(search_params)
+        print("before_search - output: search_params")
+        print(sp)
         # print("before_search - facetfields:")
         # print(eaw_get_facetfields())
         return(sp)
