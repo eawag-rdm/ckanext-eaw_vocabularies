@@ -11,7 +11,7 @@
 <h4 class="h4searchlabel">{{ title }}</h4>
 <div>
   <select class="filterselect fouc" id="{{ id }}" name="{{ name }}" {{ attrs|safe }}>
-    {% for option in options %}
+    {% for option in options|sort(attribute='label') %}
       <option class="fouc" value="{{ option.value }}"{% if option.value in select %}
 	      selected="selected"{% endif %}>{{ option.label or option.value }}</option>
      {% endfor %}
