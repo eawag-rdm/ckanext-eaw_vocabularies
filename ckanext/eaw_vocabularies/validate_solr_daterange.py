@@ -91,6 +91,8 @@ class SolrDaterange(object):
 
     @classmethod
     def _check_time_direction(cls, start, end):
+        if start == '*' or end == '*':
+            return
         if [start, end] != sorted([start, end]):
             raise Invalid("You inverted the arrow of time!\n" +
                           "{} < {}".format(end, start))
