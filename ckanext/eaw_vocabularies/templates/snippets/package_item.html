@@ -20,10 +20,10 @@
 {% endblock %}
   
 {% block heading_title %}
-  {{ h.link_to(h.truncate(title, truncate_title), packagelink) }}
   <span class="badge badge-inverse">
     {{ h.link_to(orgatitle, orgalink) }}
   </span>
+  <div>{{ h.link_to(title, packagelink) }}</div>
 {% endblock %}
 
 {% block notes %}
