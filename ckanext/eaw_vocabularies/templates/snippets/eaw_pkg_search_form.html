@@ -25,6 +25,12 @@ The search form for dataset search
       method="get" data-module="select-switch"
       data-module-target="select">
 
+
+     {% if include_children_option %}
+       {{ form.checkbox('include_children', label="Include Sub-Organizations", checked=(h.is_include_children_selected(c.fields)), value=True, error=error) }}
+     {% endif %}
+
+  
       {# Variables #}
       {% set fieldname='variables' %}
       {% snippet 'snippets/eaw_specific_search.html',
