@@ -8,8 +8,15 @@ The search form for dataset search
 {% resource 'eaw_theme/eaw_theme_hidewithjs.js' %}
 {% resource 'eaw_vocabularies/eaw_vocabularies_daterange_info.js' %}
 
+{# Detect if this is a search form restricted to an organization #}
+{% if c.controller == 'organization' %} 
+  {% set title=_('Filter Datasets') ~ ' in ' ~ c.group['title'] %}  
+{% else %}  
+  {% set title=_('Filter Datasets') %}
+{% endif %} 
+  
+<h3>{{ title }}</h3>
 
-<h3>{{ _('Filter Datasets') }}</h3>
 {% if form_id is not defined %}
   {% set form_id="dataset-search-form" %}
 {% endif %}
@@ -25,10 +32,9 @@ The search form for dataset search
       method="get" data-module="select-switch"
       data-module-target="select">
 
-
-     {% if include_children_option %}
-       {{ form.checkbox('include_children', label="Include Sub-Organizations", checked=(h.is_include_children_selected(c.fields)), value=True, error=error) }}
-     {% endif %}
+      {% if include_children_option %}
+	{{ form.checkbox('include_children', label="include sub-organizations", checked=(h.is_include_children_selected(c.fields)), value=True, error=error) }}
+      {% endif %}
 
   
       {# Variables #}
