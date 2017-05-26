@@ -31,11 +31,6 @@ The search form for dataset search
       endif %} search-form"
       method="get" data-module="select-switch"
       data-module-target="select">
-
-      {% if include_children_option %}
-	{{ form.checkbox('include_children', label="include sub-organizations", checked=(h.is_include_children_selected(c.fields)), value=True, error=error) }}
-      {% endif %}
-
   
       {# Variables #}
       {% set fieldname='variables' %}
