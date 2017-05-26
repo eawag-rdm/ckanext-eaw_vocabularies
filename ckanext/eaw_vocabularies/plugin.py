@@ -170,16 +170,9 @@ def mk_field_queries(search_params):
     return(search_params)    
             
 class Eaw_VocabulariesPlugin(p.SingletonPlugin, tk.DefaultDatasetForm):
-    p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
     p.implements(p.IPackageController, inherit=True)
-    
-    # IConfigurer
-    def update_config(self, config_):
-        tk.add_template_directory(config_, 'templates')
-        #tk.add_public_directory(config_, 'public')
-        tk.add_resource('fanstatic', 'eaw_vocabularies')
-    
+        
     # ITemplateHelpers
     def get_helpers(self):
         return({'eaw_choices': eaw_choices,
