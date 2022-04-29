@@ -1,4 +1,4 @@
-from pylons import c
+from ckan.common import c
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 import ckanext.eaw_vocabularies.validate_solr_daterange as dr
