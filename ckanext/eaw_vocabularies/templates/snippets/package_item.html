@@ -10,7 +10,7 @@
   {% set organame = package.organization.name %}
   {% set orgalink = h.url_for(controller='organization',
   action='read', id=organame) %}
-  {% set packagelink = h.url_for(controller='package',
+  {% set packagelink = h.url_for(controller='dataset',
   action='read', id=package.name) %}
 
 {% block package_item %}
