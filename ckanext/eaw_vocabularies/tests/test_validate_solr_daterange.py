@@ -1,6 +1,6 @@
 from ckanext.eaw_vocabularies.validate_solr_daterange import SolrDaterange
-from ckan.plugins.toolkit import Invalid
-from nose.tools import assert_raises
+import ckan.plugins.toolkit as tk
+import pytest
 
 class TestSolrDaterange(object):
 
@@ -16,7 +16,7 @@ class TestSolrDaterange(object):
            'day': ['00', '35'],
            'hour': ['00', '15', '23'],
            'minute': ['00', '23', '59'],
-           'second': ['00Z', '59Z', '23.3Z', '12.54345Z']
+           'second': ['00Z', '59Z', '23.3Z', '12.543Z'] # greater precision that miliseconds will be ignored
     }
 
     pas_implicit_range = ['2016', '0638-02', '-0124-10-00', '45919-12-35T00',
@@ -50,8 +50,8 @@ class TestSolrDaterange(object):
             print("FAIL date_element typ: {}".format(typ))
             for e in self.fail[typ]:
                 print("FAIL date_element: {}".format(e))
-                assert_raises(Invalid,
-                              SolrDaterange._check_date_element, typ, e)
+                with pytest.raises(tk.Invalid):
+                    SolrDaterange._check_date_element(typ, e)
 
         for y in self.pas:
             print("PASS date_element typ: {}".format(typ))
@@ -75,7 +75,8 @@ class TestSolrDaterange(object):
             assert(check == t)
         for t in self.fail_implicit_range:
             print("FAIL implicit: {}".format(t))
-            assert_raises(Invalid, SolrDaterange._check_implicit_range, t)
+            with pytest.raises(tk.Invalid):
+                SolrDaterange._check_implicit_range(t)
 
     def test_validate(self):
         for t in self.pas_explicit_range:
@@ -83,12 +84,14 @@ class TestSolrDaterange(object):
             gd = SolrDaterange.validate(t)
         for t in self.fail_explicit_range:
             print("FAIL validate: {}".format(t))
-            assert_raises(Invalid, SolrDaterange.validate, t)
+            with pytest.raises(tk.Invalid):
+                SolrDaterange.validate(t)
 
     def test_check_month_day_validity(self):
         for d in self.fail_date_month:
             print("FAIL month_day: {}".format(d))
-            assert_raises(Invalid, SolrDaterange._check_month_day_validity, d)
+            with pytest.raises(tk.Invalid):
+                SolrDaterange._check_month_day_validity(d)
         for d in self.pass_date_month:
             print("PASS month_day: {}".format(d))
             res = SolrDaterange._check_month_day_validity(d)

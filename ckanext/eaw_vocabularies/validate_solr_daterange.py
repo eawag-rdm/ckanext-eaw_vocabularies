@@ -20,7 +20,7 @@ class SolrDaterange(object):
                   'day': r'(?P<day>\d{2})',
                   'hour': r'(?P<hour>([01][0-9]|2[0-3]))',
                   'minute': r'(?P<minute>[0-5][0-9])',
-                  'second': r'(?P<second>[0-5][0-9](\.\d{3})?Z?)'
+                  'second': r'(?P<second>[0-5][0-9](\.\d{1,3})?Z)'  # forcing Z to be supplied; allow resolution till miliseconds, solr can't handle more precision
                   }
     
     regex_implicit_range = re.compile(
@@ -71,7 +71,7 @@ class SolrDaterange(object):
     @classmethod
     def _check_date_element(cls, typ, elemstr):
         '''Checks an element of the DateRange string.
-        <typ> = 'second', 'minute', hour', 'day', 'month', or 'year'.
+        <typ> = 'second', 'minute', hour', 'day', 'month', or 'year'.*
         '''
         reg = cls.regex_elem[typ]
         matchres = re.match(cls._solregex(reg), elemstr)
