@@ -11,7 +11,7 @@ Notes on its interpretation:
 '''
 
 import re
-from ckan.plugins.toolkit import Invalid
+import ckan.plugins.toolkit as tk
 
 class SolrDaterange(object):
 
@@ -64,9 +64,9 @@ class SolrDaterange(object):
         maxdays = [31, 28 if noleap(intyear) else 29,
                    31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if not (intmonth is None or 1 <= intmonth <= 12):
-            raise Invalid("{} is not a valid month.".format(datedict['month']))
+            raise tk.Invalid("{} is not a valid month.".format(datedict['month']))
         if not (intday is None or 1 <= intday <= maxdays[intmonth - 1]):
-            raise Invalid("{} is not a valid day.".format(datedict['day']))
+            raise tk.Invalid("{} is not a valid day.".format(datedict['day']))
         
     @classmethod
     def _check_date_element(cls, typ, elemstr):
@@ -76,7 +76,7 @@ class SolrDaterange(object):
         reg = cls.regex_elem[typ]
         matchres = re.match(cls._solregex(reg), elemstr)
         if matchres is None:
-            raise Invalid("{}: not a valid {}".format(elemstr, typ))
+            raise tk.Invalid("{}: not a valid {}".format(elemstr, typ))
         else:
             return(matchres.groupdict()[typ])
 
@@ -84,7 +84,7 @@ class SolrDaterange(object):
     def _check_implicit_range(cls, rangestr):
         matchres = re.match(cls.regex_implicit_range, rangestr)
         if matchres is None:
-            raise Invalid("{}: not a valid DateRange - field"
+            raise tk.Invalid("{}: not a valid DateRange - field"
                              .format(rangestr))
         else:
             return(matchres.groupdict())
@@ -94,7 +94,7 @@ class SolrDaterange(object):
         if start == '*' or end == '*':
             return
         if [start, end] != sorted([start, end]):
-            raise Invalid("You inverted the arrow of time!\n" +
+            raise tk.Invalid("You inverted the arrow of time!\n" +
                           "{} < {}".format(end, start))
     
     @classmethod
