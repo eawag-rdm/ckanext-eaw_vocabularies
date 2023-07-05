@@ -3,31 +3,32 @@
 {# Attaches link to package to whole "well-div". #}
 {# Attaches link to package to package text #}
 {# Adds package.organization as badge. #}
+{#
+    {% ckan_extends %}
 
-{% ckan_extends %}
+      {% set orgatitle = package.organization.title %}
+      {% set organame = package.organization.name %}
+      {% set orgalink = h.url_for(controller='organization',
+      action='read', id=organame) %}
+      {% set packagelink = h.url_for(controller='dataset',
+      action='read', id=package.name) %}
 
-  {% set orgatitle = package.organization.title %}
-  {% set organame = package.organization.name %}
-  {% set orgalink = h.url_for(controller='organization',
-  action='read', id=organame) %}
-  {% set packagelink = h.url_for(controller='dataset',
-  action='read', id=package.name) %}
+    {% block package_item %}
+      <div class="well well-small" onclick="location.href='{{ packagelink }}'">
+        {{ super() }}
+      </div>
+    {% endblock %}
 
-{% block package_item %}
-  <div class="well well-small" onclick="location.href='{{ packagelink }}'">
-    {{ super() }}
-  </div>
-{% endblock %}
-  
-{% block heading_title %}
-  <span class="badge badge-inverse">
-    {{ h.link_to(orgatitle, orgalink) }}
-  </span>
-  <div>{{ h.link_to(title, packagelink) }}</div>
-{% endblock %}
+    {% block heading_title %}
+      <span class="badge badge-inverse">
+        {{ h.link_to(orgatitle, orgalink) }}
+      </span>
+      <div>{{ h.link_to(title, packagelink) }}</div>
+    {% endblock %}
 
-{% block notes %}
-  <a class="package_desc" href="{{ packagelink }}">
-    {{ super() }}
-  </a>
-{% endblock %}
+    {% block notes %}
+      <a class="package_desc" href="{{ packagelink }}">
+        {{ super() }}
+      </a>
+    {% endblock %}
+ #}
